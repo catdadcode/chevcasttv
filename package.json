@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "ts-node-dev --project ./server/tsconfig.json --ignore-watch ./ --watch ./server ./server/server.ts",
     "build": "npm run clean && next build && cd ./server && tsc",
-    "start": "cross-env NODE_ENV=production node ./server/build/server.js",
+    "start": "NODE_ENV=production node ./server/build/server.js",
     "clean": "rimraf ./server/build",
     "lint": "next lint"
   },
@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@types/react": "17.0.20",
-    "cross-env": "^7.0.3",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "rimraf": "^3.0.2",
