@@ -16,4 +16,4 @@ app.prepare().then(() => {
   }).listen(PORT ?? 3000, () => {
     console.log(`> Ready on http://localhost:${PORT ?? 3000}`)
   });
-})
+});
