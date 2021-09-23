@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "ts-node-dev -p ./tsconfig.server.json --ignore-watch ./ --watch ./server,./utils -r dotenv/config ./server.ts",
-    "build": "npm run clean && tsc -p ./tsconfig.server.json && next build",
-    "start": "NODE_ENV=production node -r dotenv/config ./server.js",
-    "clean": "rimraf ./server.js && rimraf ./config/index.js",
+    "build": "next build && npm run clean && tsc -p ./tsconfig.server.json && cp ./package.server.json ./build/package.json && cp ./config/package.json ./build/config && cd ./build && npm i",
+    "start": "NODE_ENV=production node -r dotenv/config ./build/server.js",
+    "clean": "rimraf ./build",
     "lint": "next lint"
   },
   "old-scripts": {
