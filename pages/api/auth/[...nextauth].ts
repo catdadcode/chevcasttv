@@ -8,6 +8,7 @@ import config from "config";
 const {
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
+  JWT_SIGNING_KEY,
   SESSION_SECRET
 } = config;
 
@@ -26,7 +27,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     session: {
       jwt: true
     },
-    secret: SESSION_SECRET
+    secret: SESSION_SECRET,
+    jwt: {
+      secret: SESSION_SECRET,
+      signingKey: JWT_SIGNING_KEY
+    }
   });
 };
 

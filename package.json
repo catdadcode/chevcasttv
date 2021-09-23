@@ -7,9 +7,9 @@
     "build": "run-s lint && run-p build:*",
     "build:client": "next build",
     "build:server": "run-s clean && tsc -p ./tsconfig.server.json",
-    "dev": "ts-node-dev --project ./tsconfig.server.json --ignore-watch ./ --watch ./server.ts,./config/*.ts,./db/*.ts -r dotenv/config ./server.ts",
+    "dev": "ts-node-dev --project ./tsconfig.server.json --ignore-watch ./ --watch ./server.ts,./config/*.ts,./db/*.ts ./server.ts",
     "lint": "next lint",
-    "start": "NODE_ENV=production node -r dotenv/config ./build/server.js"
+    "start": "NODE_ENV=production node ./build/server.js"
   },
   "dependencies": {
     "@emotion/react": "^11.4.1",

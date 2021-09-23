@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
@@ -8,6 +11,7 @@ import debug from "debug";
 const log = debug("CHEVCASTTV:SERVER");
 
 const { APP_URL, NODE_ENV } = config;
+
 
 (async () => {
 
