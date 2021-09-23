@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import { Avatar, Button, LoginIcon, LogoutIcon } from "components";
+import { Avatar, Button, LoginIcon, LogoutIcon } from "utils/components";
 import styles from "../styles/Home.module.css";
 import { useSession, signIn, signOut } from "next-auth/react";
 

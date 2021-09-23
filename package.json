@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --project ./server/tsconfig.json --ignore-watch ./ --watch ./server -r dotenv/config ./server/server.ts",
-    "build": "npm run clean && next build && cd ./server && tsc",
-    "start": "NODE_ENV=production node ./server/build/server.js",
-    "clean": "rimraf ./server/build",
+    "dev": "ts-node-dev -p ./tsconfig.server.json --ignore-watch ./ --watch ./server,./utils -r dotenv/config ./server/server.ts",
+    "build": "npm run clean && tsc -p ./tsconfig.server.json && next build",
+    "start": "NODE_ENV=production node -r dotenv/config ./server/server.js",
+    "clean": "rimraf ./server/server.js && rimraf ./utils/config.js",
     "lint": "next lint"
   },
   "old-scripts": {
@@ -22,8 +22,7 @@
     "@mui/material": "^5.0.0-rc.1",
     "@next-auth/mongodb-adapter": "0.0.2-next.281",
     "axios": "^0.21.4",
-    "components": "file:components",
-    "config": "file:config",
+    "utils": "file:utils",
     "dotenv": "^10.0.0",
     "mongodb": "^4.1.2",
     "next": "11.1.2",
@@ -33,7 +32,6 @@
   },
   "devDependencies": {
     "@types/react": "17.0.20",
-    "@types/uuid": "^8.3.1",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "rimraf": "^3.0.2",

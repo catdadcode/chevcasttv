@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
-import config from "config";
+import config from "utils/config";
 
 const { APP_URL, NODE_ENV } = config;
 
