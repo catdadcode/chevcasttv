@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
@@ -17,10 +16,10 @@ const Home: NextPage = () => {
           Welcome to ChevCast.tv!
         </h1>
 
-        <p className={styles.description}>
+        <div className={styles.description}>
           <h3>Pardon our dust.</h3>
           <p>We are working hard to bring you a brand new ChevCast Community experience!</p>
-        </p>
+        </div>
 
         <div className={styles.grid}>
         </div>

@@ -1,19 +1,25 @@
-// server.js
 import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
+import config from "config";
 
-const { NODE_ENV, PORT } = process.env;
+const { APP_URL, NODE_ENV } = config;
 
-const dev = NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
+(async () => {
 
-app.prepare().then(() => {
-  createServer((req, res) => {
-    const parsedUrl = parse(req.url ?? "", true)
+  // Configure nextjs app.
+  const app = next({ dev: NODE_ENV !== "production"});
+  const handle = app.getRequestHandler();
+  await app.prepare();
+
+  // Start http server
+  const server = createServer((req, res) => {
+    const parsedUrl = parse(req.url ?? "", true);
     handle(req, res, parsedUrl);
-  }).listen(PORT ?? 3000, () => {
-    console.log(`> Ready on http://localhost:${PORT ?? 3000}`)
   });
-});
+  await server.listen(3000);
+  console.log(`> ChevCastTV is running at ${APP_URL} in ${NODE_ENV} mode.`);
+
+  // Initialize Chevbot
+
+})().catch(console.log);
