@@ -5,7 +5,7 @@ import config from "config";
 import { initDb } from "db";
 import debug from "debug";
 
-const log = debug("SERVER");
+const log = debug("CHEVCASTTV:SERVER");
 
 const { APP_URL, NODE_ENV } = config;
 

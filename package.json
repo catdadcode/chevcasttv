@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "clean": "rimraf ./server.js && rimraf ./config/index.js && rimraf ./db/index.js",
-    "build": "npm-run-all -l clean lint -p build:*",
+    "build": "run-s lint && run-p build:*",
     "build:client": "next build",
-    "build:server": "tsc -p ./tsconfig.server.json",
+    "build:server": "run-s clean && tsc -p ./tsconfig.server.json",
     "dev": "ts-node-dev --project ./tsconfig.server.json --ignore-watch ./ --watch ./server.ts,./config/*.ts,./db/*.ts -r dotenv/config ./server.ts",
     "lint": "next lint",
     "start": "NODE_ENV=production node -r dotenv/config ./build/server.js"
