@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "lib/mongodb";
+import dbClient from "db";
 import config from "config";
 
 const {
@@ -11,10 +11,10 @@ const {
   SESSION_SECRET
 } = config;
 
-export default async (req: NextApiRequest, res: NextApiResponse) => {
+const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   return await NextAuth(req, res, {
     adapter: MongoDBAdapter({
-      db: (await clientPromise).db("chevcasttv")
+      db: dbClient.db("chevcasttv")
     }),
     providers: [
       DiscordProvider({
@@ -28,4 +28,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     },
     secret: SESSION_SECRET
   });
-}
+};
+
+export default handler;

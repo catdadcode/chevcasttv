@@ -1,17 +1,21 @@
 {
+  "ts-node": {
+    "files": true
+  },
   "compilerOptions": {
     "target": "es5",
     "module": "CommonJS",
-    "outDir": "./build",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "skipLibCheck": true,
-    "paths": {}
+    "resolveJsonModule": true,
+    "isolatedModules": true,
   },
   "files": [
-    "./server.ts",
-    "./config/index.ts"
+    "./types/global.d.ts",
+    "./config/index.ts",
+    "./db/index.ts",
+    "./server.ts"
   ]
 }
