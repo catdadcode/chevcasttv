@@ -10,7 +10,7 @@
     "paths": {}
   },
   "files": [
-    "./server/server.ts",
-    "./utils/config.ts"
+    "./server.ts",
+    "./config/index.ts"
   ]
 }

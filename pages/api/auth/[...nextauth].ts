@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import config from "utils/config";
+import config from "config";
 
 const {
   DISCORD_CLIENT_ID,

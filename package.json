@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev -p ./tsconfig.server.json --ignore-watch ./ --watch ./server,./utils -r dotenv/config ./server/server.ts",
+    "dev": "ts-node-dev -p ./tsconfig.server.json --ignore-watch ./ --watch ./server,./utils -r dotenv/config ./server.ts",
     "build": "npm run clean && tsc -p ./tsconfig.server.json && next build",
-    "start": "NODE_ENV=production node -r dotenv/config ./server/server.js",
-    "clean": "rimraf ./server/server.js && rimraf ./utils/config.js",
+    "start": "NODE_ENV=production node -r dotenv/config ./server.js",
+    "clean": "rimraf ./server.js && rimraf ./config/index.js",
     "lint": "next lint"
   },
   "old-scripts": {
@@ -22,7 +22,8 @@
     "@mui/material": "^5.0.0-rc.1",
     "@next-auth/mongodb-adapter": "0.0.2-next.281",
     "axios": "^0.21.4",
-    "utils": "file:utils",
+    "components": "file:components",
+    "config": "file:config",
     "dotenv": "^10.0.0",
     "mongodb": "^4.1.2",
     "next": "11.1.2",
