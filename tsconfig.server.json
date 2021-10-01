@@ -13,10 +13,10 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "files": [
+  "include": [
     "./types/global.d.ts",
     "./config/index.ts",
     "./db/index.ts",
-    "./server.ts"
+    "./server"
   ]
 }
