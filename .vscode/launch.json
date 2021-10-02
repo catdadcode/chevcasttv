@@ -13,7 +13,7 @@
       ],
       "restart": true,
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
-      "args": ["--project", "./tsconfig.server.json", "--ignore-watch", "./", "--watch", "./server.ts,./config/*.ts,./db/*.ts", "./server.ts"],
+      "args": ["--project", "./tsconfig.server.json", "--ignore-watch", "./", "--watch", "./server/*.ts,./config/*.ts,./db/*.ts", "./server/server.ts"],
       "outFiles": [
         "${workspaceFolder}/**/*.js"
       ],

@@ -7,6 +7,7 @@ import next from "next";
 import config from "config";
 import { initDb } from "db";
 import debug from "debug";
+import chatbot from "./chatbot";
 
 const log = debug("CHEVCASTTV:SERVER");
 
@@ -30,6 +31,10 @@ const { APP_URL, NODE_ENV } = config;
   });
   await server.listen(3000);
   console.log(`> ChevCastTV is running at ${APP_URL} in ${NODE_ENV} mode.`);
+
+  log("Starting chatbot...");
+  await chatbot();
+  console.log("> Chatbot active.");
 
   // log("Initializing Chevbot...");
   // Initialize Chevbot
