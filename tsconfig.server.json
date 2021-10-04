@@ -11,7 +11,8 @@
     "strict": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "downlevelIteration": true
   },
   "include": [
     "./types/global.d.ts",
