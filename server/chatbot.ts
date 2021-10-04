@@ -1,8 +1,6 @@
 import debug from "debug";
 import tts from "@google-cloud/text-to-speech";
 import config from "config";
-// import Speaker from "speaker";
-import wav from "wav";
 import stream from "stream";
 import { Client as TwitchClient } from "tmi.js";
 import { Client as DiscordClient, Intents, VoiceChannel } from "discord.js";
@@ -12,8 +10,8 @@ import { createDiscordJSAdapter } from './adapter';
 const { DISCORD_BOT_TOKEN, GOOGLE_API_KEY } = config;
 const log = debug("CHEVCASTTV:CHATBOT");
 const CHANNELS = "Codemanis,HarlequinDollFace,Ember_Stone,rainbowkittencast,SithLordBoris";
-const discordChannelId = "830238800239525898";
-const discordGuildId = "284542264305385474";
+const discordChannelId = "752398756229677171";
+const discordGuildId = "752398755533291571";
 
 const ttsClient = new tts.TextToSpeechClient({
   credentials: JSON.parse(GOOGLE_API_KEY)
@@ -68,31 +66,31 @@ function cleanUsername(username: string) {
 
 async function speak(message: string, voice?: string): Promise<void> {
   try {
-
-
     const [response] = await ttsClient.synthesizeSpeech({
       input: { text: message },
       voice: { name: voice, languageCode: "en-US" },
       audioConfig: { audioEncoding: "LINEAR16" },
     });
+    const ttsStream = new stream.Readable();
+    ttsStream._read = () => {};
+    ttsStream.push(response.audioContent);
+    ttsStream.push(null);
 
-    const channel = (discordClient.channels.cache.get(discordChannelId) ?? await discordClient.channels.fetch(discordChannelId)) as VoiceChannel;
-    // const ttsStream = new stream.Readable();
-    // ttsStream._read = () => {};
-    // ttsStream.push(response.audioContent);
-    // ttsStream.push(null);
-    const resource = createAudioResource("https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", {
+    const resource = createAudioResource(ttsStream, {
       inputType: StreamType.Arbitrary
     });
     const player = createAudioPlayer();
     player.play(resource);
     await entersState(player, AudioPlayerStatus.Playing, 5e3);
+
+    const channel = (discordClient.channels.cache.get(discordChannelId) ?? await discordClient.channels.fetch(discordChannelId)) as VoiceChannel;
     const connection = await joinVoiceChannel({
       channelId: discordChannelId,
       guildId: discordGuildId,
       adapterCreator: createDiscordJSAdapter(channel)
     });
     await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
+    connection.subscribe(player);
 
   } catch (err: any) {
     console.log(err?.message ?? err);
