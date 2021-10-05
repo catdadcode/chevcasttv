@@ -102,6 +102,7 @@ export default async function (twitchChannels: string[], discordGuildId: string,
     "harlequindollface": "en-US-Wavenet-F",
     "noobpieces": "en-IN-Wavenet-D"
   };
+  availableVoices = availableVoices.filter(voice => Object.values(userVoice).includes(voice));
   const ttsQueue: { username: string, message: string }[] = [];
   let queueInProgress = false;
   const processQueue = async () => {
