@@ -133,7 +133,6 @@ export default async function (twitchChannels: string[], discordGuildId: string,
   twitchClient.on("message", async (channel, tags, message, self) => {
     try {
       const username = tags["display-name"];
-      log(`Twitch message: ${channel}:${username}: ${message}`);
       if (typeof username !== "string") return;
       ttsQueue.unshift({ username, message });
       processQueue();
