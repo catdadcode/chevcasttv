@@ -14,9 +14,9 @@
 
 # production
 /build
-server.js
-/config/index.js
-/db/index.js
+/server/*.js
+/config/*.js
+/db/*.js
 
 # misc
 .DS_Store
