@@ -94,7 +94,7 @@ export default async function (twitchChannels: string[], discordGuildId: string,
 
   log("Configuring TTS queue function...");
   let currentUser: string | undefined;
-  let timeoutId: number | undefined;
+  let timeoutId: NodeJS.Timeout | undefined;
   const userVoice: Record<string, string> = {
     "ChevCast": "en-US-Wavenet-J",
     "Codemanis": "en-AU-Standard-B",
@@ -121,7 +121,7 @@ export default async function (twitchChannels: string[], discordGuildId: string,
       await speak(ttsMessage, voice);
       currentUser = username;
       if (timeoutId) clearTimeout(timeoutId);
-      setTimeout(() => currentUser = undefined, 45e3);
+      timeoutId = setTimeout(() => currentUser = undefined, 45e3);
     }
     queueInProgress = false;
   };
