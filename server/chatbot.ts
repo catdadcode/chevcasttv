@@ -110,7 +110,10 @@ export default async function (twitchChannels: string[], discordGuildId: string,
     queueInProgress = true;
     while (ttsQueue.length > 0) {
       const { username, message } = ttsQueue.pop()!;
-      let voice = userVoice[username] ?? availableVoices.pop();
+      let voice: string | undefined = userVoice[username];
+      if (!voice) {
+        voice = userVoice[username] = availableVoices.pop()!;
+      }
       if (availableVoices.length === 0) {
         fillAvailableVoices();
       }
