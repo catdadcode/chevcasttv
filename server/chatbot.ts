@@ -28,10 +28,14 @@ export default async function (twitchChannels: string[], discordGuildId: string,
     credentials: JSON.parse(GOOGLE_API_KEY)
   });
   const [{ voices }] = await ttsClient.listVoices();
-  const availableVoices: string[] = voices!
-    .filter(voice => voice.languageCodes?.[0].match(/^en-/) && typeof voice.name === "string")
-    .map(voice => voice.name!);
-  shuffle(availableVoices);
+  let availableVoices: string[] = [];
+  const fillAvailableVoices = () => { 
+    availableVoices = voices!
+      .filter(voice => voice.languageCodes?.[0].match(/^en-/) && typeof voice.name === "string")
+      .map(voice => voice.name!);
+    shuffle(availableVoices);
+  }
+  fillAvailableVoices();
   log("TTS ready for synthesis.");
 
   // *******************************************
@@ -106,6 +110,9 @@ export default async function (twitchChannels: string[], discordGuildId: string,
     while (ttsQueue.length > 0) {
       const { username, message } = ttsQueue.pop()!;
       let voice = userVoice[username] ?? availableVoices.pop();
+      if (availableVoices.length === 0) {
+        fillAvailableVoices();
+      }
       const ttsMessage = username === currentUser || message.startsWith("ALEXA") ? message : `${enunciateUsername(username)} says ${message}`;
       await speak(ttsMessage, voice);
       currentUser = username;
