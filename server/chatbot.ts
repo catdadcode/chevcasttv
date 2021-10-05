@@ -113,9 +113,9 @@ export default async function (twitchChannels: string[], discordGuildId: string,
       let voice: string | undefined = userVoice[username];
       if (!voice) {
         voice = userVoice[username] = availableVoices.pop()!;
-      }
-      if (availableVoices.length === 0) {
-        fillAvailableVoices();
+        if (availableVoices.length === 0) {
+          fillAvailableVoices();
+        }
       }
       const ttsMessage = username === currentUser || message.startsWith("ALEXA") ? message : `${enunciateUsername(username)} says ${message}`;
       await speak(ttsMessage, voice);
