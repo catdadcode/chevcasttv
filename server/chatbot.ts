@@ -47,37 +47,27 @@ export default async function (twitchChannels: string[], discordGuildId: string,
 
   // *******************************************
 
-  log("Connecting Discord bot to voice channel...")
-  const channel = (discordClient.channels.cache.get(discordChannelId) ?? await discordClient.channels.fetch(discordChannelId)) as VoiceChannel;
-  const connection = await joinVoiceChannel({
-    channelId: discordChannelId,
-    guildId: discordGuildId,
-    adapterCreator: channel.guild.voiceAdapterCreator
-  });
-  await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
-  log("Discord bot is in channel and ready to play audio.");
-
-  // *******************************************
-
-  log("Creating Discord audio player resource...");
-  const player = createAudioPlayer({
-    behaviors: { noSubscriber: NoSubscriberBehavior.Play }
-  });
-  player.on("stateChange", ({}, newState) => {
-    switch (newState.status) {
-      case AudioPlayerStatus.Playing:
-        connection.setSpeaking(true);
-      default:
-        connection.setSpeaking(false);
-    }
-  });
-  log("Discord audio player is ready.");
-
-  // *******************************************
-
   log("Configuring speak function...");
   const speak = async (message: string, voice?: string) => {
     try {
+      const channel = (discordClient.channels.cache.get(discordChannelId) ?? await discordClient.channels.fetch(discordChannelId)) as VoiceChannel;
+      const connection = await joinVoiceChannel({
+        channelId: discordChannelId,
+        guildId: discordGuildId,
+        adapterCreator: channel.guild.voiceAdapterCreator
+      });
+      await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
+      const player = createAudioPlayer({
+        behaviors: { noSubscriber: NoSubscriberBehavior.Play }
+      });
+      player.on("stateChange", ({}, newState) => {
+        switch (newState.status) {
+          case AudioPlayerStatus.Playing:
+            connection.setSpeaking(true);
+          default:
+            connection.setSpeaking(false);
+        }
+      });
       const [{ audioContent }] = await ttsClient.synthesizeSpeech({
         input: { text: message },
         voice: { name: voice, languageCode: "en-US" },
