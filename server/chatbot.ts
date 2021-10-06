@@ -97,7 +97,7 @@ function cleanUsername(username: string) {
 
 function enunciateUsername(username: string) {
   username = cleanUsername(username);
-  if (username.includes(" ")) username = username.slice(0, username.indexOf(" "));
+  // if (username.includes(" ")) username = username.slice(0, username.indexOf(" "));
   return username;
 }
 
