@@ -9,7 +9,8 @@ const createChatbot = async (name: string, twitchChannels: string[], discordChan
 
   // Hard-coded values for pre-reserved voices.
   const userVoice: Record<string, string> = {
-    "ChevCast": "en-US-Wavenet-J",
+    "alopex_art": "en-GB-Standard-A",
+    "ChevCast": "en-US-Wavenet-I",//"en-US-Wavenet-J",
     "Codemanis": "en-AU-Standard-B",
     "Ember_Stone": "en-US-Wavenet-H",
     "harlequindollface": "en-US-Wavenet-F",
@@ -59,7 +60,7 @@ const createChatbot = async (name: string, twitchChannels: string[], discordChan
     await onMessage(channel, (username, message) => {
       ttsQueue.unshift({ username, message });
       processQueue();
-    })
+    });
   }
 
   log("Joining Discord voice channel...");
@@ -69,13 +70,15 @@ const createChatbot = async (name: string, twitchChannels: string[], discordChan
   await playAudio(discordChannelId, audioContent);
   
   // const testVoices = englishVoices!;
-  // await speak(`There are ${testVoices.length} voices available.`);
+  // const testVoices = ["en-GB-Standard-A"];
+  // audioContent = await createAudio(`There are ${testVoices.length} voices available.`);
+  // await playAudio(discordChannelId, audioContent);
   // await keypress();
   // for (let index=0; index < testVoices.length; index++) {
   //   const voice = testVoices[index];
-  //   const msg = `Voice ${index}: Hi this is Codeman`;
+  //   const msg = `Voice ${index}: Hi this is Alopex`;
   //   console.log(`Voice ${index}: ${voice}`);
-  //   await speak(msg, voice);
+  //   await playAudio(discordChannelId, await createAudio(msg, voice));
   //   await keypress();
   // }
 };
