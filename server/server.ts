@@ -9,9 +9,9 @@ import next from "next";
 import config from "config";
 import { initDb } from "db";
 import logger from "./logger";
-import { initialize as initDiscord } from "./discordClient";
-import { initialize as initGoogleTTS } from "./googleTTSClient";
-import { initialize as initTwitch } from "./twitchClient";
+import { initialize as initDiscord } from "./api-clients/discordClient";
+import { initialize as initGoogleTTS } from "./api-clients/googleTTSClient";
+import { initialize as initTwitch } from "./api-clients/twitchClient";
 import createChatbot from "./chatbot";
 
 const log = logger.extend("SERVER");

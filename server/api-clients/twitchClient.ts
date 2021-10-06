@@ -1,5 +1,5 @@
 import { Client } from "tmi.js";
-import logger from "./logger";
+import logger from "../logger";
 
 const log = logger.extend("TWITCH_CLIENT");
 

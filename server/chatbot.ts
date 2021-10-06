@@ -1,6 +1,6 @@
-import { playAudio } from "./discordClient";
-import { createAudio, englishVoices } from "./googleTTSClient";
-import { onMessage } from "./twitchClient";
+import { playAudio } from "./api-clients/discordClient";
+import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
+import { onMessage } from "./api-clients/twitchClient";
 import logger from "./logger";
 
 const createChatbot = async (name: string, twitchChannels: string[], discordChannelId: string) => {

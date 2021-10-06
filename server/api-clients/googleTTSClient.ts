@@ -1,6 +1,6 @@
 import { TextToSpeechClient } from "@google-cloud/text-to-speech";
 import config from "config";
-import logger from "./logger";
+import logger from "../logger";
 
 const log = logger.extend("GOOGLE_TTS_CLIENT");
 

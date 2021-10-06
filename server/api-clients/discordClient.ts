@@ -10,7 +10,7 @@ import {
 } from "@discordjs/voice";
 import config from "config";
 import { Readable } from "stream";
-import logger from "./logger";
+import logger from "../logger";
 
 const log = logger.extend("DISCORD_CLIENT");
 
