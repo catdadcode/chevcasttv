@@ -1,9 +1,14 @@
 import { Client } from "tmi.js";
+import logger from "./logger";
+
+const log = logger.extend("TWITCH_CLIENT");
 
 const twitchClient = new Client({});
 
 export const initialize = async () => {
+  log("Initializing Twitch client...");
   await twitchClient.connect();
+  log("Twitch client ready.");
 };
 
 type MessageHandler = (username: string, message: string, self: boolean) => void;
@@ -12,6 +17,7 @@ export const onMessage = async (channel: string, handler: MessageHandler) => {
   const currentChannels = twitchClient.getChannels();
   if (!currentChannels.includes(channel)) {
     await twitchClient.join(channel);
+    log(`Twitch client now monitoring channel for ${channel}.`);
   }
   let handlers = messageHandlers[channel];
   if (!handlers) {
@@ -24,6 +30,7 @@ export const onMessage = async (channel: string, handler: MessageHandler) => {
     if (handlers.length === 0) {
       delete messageHandlers[channel];
       await twitchClient.part(channel);
+      log(`Twitch client no longer monitoring channel for ${channel}.`);
     }
   };
   return unsubscribe;

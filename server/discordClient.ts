@@ -10,22 +10,28 @@ import {
 } from "@discordjs/voice";
 import config from "config";
 import { Readable } from "stream";
+import logger from "./logger";
+
+const log = logger.extend("DISCORD_CLIENT");
 
 const { DISCORD_BOT_TOKEN } = config;
 
 const discordClient = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] }); 
 
 export const initialize = async () => {
+  log("Initializing Discord client...");
   discordClient.on("error", console.log);
   await new Promise((resolve, reject) => {
     discordClient.once("ready", resolve);
     discordClient.once("error", reject);
     discordClient.login(DISCORD_BOT_TOKEN);
   });
+  log("Discord client ready.");
 };
 
 const voiceConnections: Record<Snowflake, VoiceConnection> = {};
 export const joinVoice = async (channelId: Snowflake) => {
+  log(`Discord client joining voice channel ${channelId}...`);
   const channel = (discordClient.channels.cache.get(channelId) ?? await discordClient.channels.fetch(channelId)) as VoiceChannel;
   const connection = await joinVoiceChannel({
     channelId: channelId,
@@ -34,9 +40,11 @@ export const joinVoice = async (channelId: Snowflake) => {
   });
   await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
   voiceConnections[channel.id] = connection;
+  log(`Voice channel ${channelId} joined successfully.`);
 };
 
 export const playAudio = async (channelId: Snowflake, audioContent: Buffer) => {
+  log(`Playing audio to voice channel ${channelId}...`);
   let connection = voiceConnections[channelId];
   if (!connection) {
     await joinVoice(channelId);
@@ -53,4 +61,5 @@ export const playAudio = async (channelId: Snowflake, audioContent: Buffer) => {
   connection.subscribe(player);
   await entersState(player, AudioPlayerStatus.Idle, 60e3);
   connection.setSpeaking(false);
+  log(`Audio finished playing in channel ${channelId}.`);
 };

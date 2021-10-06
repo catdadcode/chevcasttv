@@ -8,13 +8,13 @@ import { parse } from "url";
 import next from "next";
 import config from "config";
 import { initDb } from "db";
-import debug from "debug";
+import logger from "./logger";
 import { initialize as initDiscord } from "./discordClient";
 import { initialize as initGoogleTTS } from "./googleTTSClient";
 import { initialize as initTwitch } from "./twitchClient";
 import createChatbot from "./chatbot";
 
-const log = debug("CHEVCASTTV:SERVER");
+const log = logger.extend("SERVER");
 
 const {
   APP_URL,
@@ -49,7 +49,6 @@ const {
     initTwitch()
   ]);
   log("API clients ready.");
-
 
   log("Starting chatbot...");
   await Promise.all([

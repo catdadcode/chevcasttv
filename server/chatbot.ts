@@ -1,11 +1,11 @@
-import debug from "debug";
 import { playAudio } from "./discordClient";
 import { createAudio, englishVoices } from "./googleTTSClient";
 import { onMessage } from "./twitchClient";
+import logger from "./logger";
 
 const createChatbot = async (name: string, twitchChannels: string[], discordChannelId: string) => {
 
-  const log = debug(`CHEVCASTTV:CHATBOT:${name}`);
+  const log = logger.extend(`CHATBOT:${name}`);
 
   // Hard-coded values for pre-reserved voices.
   const userVoice: Record<string, string> = {
