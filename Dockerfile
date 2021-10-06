@@ -7,6 +7,7 @@ RUN npm ci
 RUN npm run build
 
 ENV NODE_ENV production
+ENV NEXT_PUBLIC_APP_URL https://ChevCast.tv
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001

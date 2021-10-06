@@ -13,7 +13,6 @@ const Layout: FC<props> = ({ children }) => (
     <Grid item xs={12}>
       <main>{children}</main>
     </Grid>
-
     <Grid item xs={12}>
       <footer style={{textAlign: "center"}}>
         Powered by <Link href="https://chevtek.io">Chevtek</Link>

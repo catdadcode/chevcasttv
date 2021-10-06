@@ -7,16 +7,17 @@
     {
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
-      "name": "ts-node-dev",
+      "name": "nodemon",
+      "type": "pwa-node",
       "request": "launch",
-      "restart": true,
-      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
-      "args": ["--project", "./tsconfig.server.json", "--ignore-watch", "./", "--watch", "./server/*.ts,./config/*.ts,./db/*.ts", "--respawn", "--transpile-only", "--", "./server/server.ts"],
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node" ,
-      "autoAttachChildProcesses": true
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nodemon",
+      "outputCapture": "std",
+      "env": {
+        "TS_NODE_PROJECT": "tsconfig.server.json",
+        "DEBUG": "CHEVCASTTV:*"
+      },
+      "program": "${workspaceFolder}/server/server.ts",
+      "restart": true
     }
   ]
 }

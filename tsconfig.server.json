@@ -15,9 +15,9 @@
     "downlevelIteration": true
   },
   "include": [
-    "./types/global.d.ts",
-    "./config/index.ts",
-    "./db/index.ts",
-    "./server"
+    "./types/**/*.ts",
+    "./config/**/*.ts",
+    "./db/**/*.ts",
+    "./server/**/*.ts"
   ]
 }

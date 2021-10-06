@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
-dotenv.config();
+import dotenvExpand from "dotenv-expand";
+const env = dotenv.config({ path: ".env.local" });
+dotenvExpand(env);
 
 import { createServer } from "http";
 import { parse } from "url";
@@ -7,6 +9,9 @@ import next from "next";
 import config from "config";
 import { initDb } from "db";
 import debug from "debug";
+import { initialize as initDiscord } from "./discordClient";
+import { initialize as initGoogleTTS } from "./googleTTSClient";
+import { initialize as initTwitch } from "./twitchClient";
 import createChatbot from "./chatbot";
 
 const log = debug("CHEVCASTTV:SERVER");
@@ -14,10 +19,7 @@ const log = debug("CHEVCASTTV:SERVER");
 const {
   APP_URL,
   NODE_ENV,
-  DISCORD_CHEVCAST_GUILD_ID,
-  DISCORD_CHEVCAST_LIVESTREAM_TEXT_CHANNEL_ID,
   DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID,
-  DISCORD_WATERCOOLER_GUILD_ID,
   DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
   TWITCH_CHANNELS
 } = config;
@@ -40,21 +42,28 @@ const {
   await server.listen(3000);
   console.log(`> ChevCastTV is running at ${APP_URL} in ${NODE_ENV} mode.`);
 
-  log("Starting chatbot...");
-  await createChatbot(
-    TWITCH_CHANNELS.split(","),
-    DISCORD_WATERCOOLER_GUILD_ID,
-    DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID
-  );
-  await createChatbot(
-    TWITCH_CHANNELS.split(","),
-    DISCORD_CHEVCAST_GUILD_ID,
-    DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-  );
-  console.log("> Chatbot active.");
+  log("Initializing API clients...");
+  await Promise.all([
+    initDiscord(),
+    initGoogleTTS(),
+    initTwitch()
+  ]);
+  log("API clients ready.");
 
-  // log("Initializing Chevbot...");
-  // Initialize Chevbot
-  // log("...done");
+
+  log("Starting chatbot...");
+  await Promise.all([
+    createChatbot(
+      "WATERCOOLER",
+      TWITCH_CHANNELS.split(","),
+      DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID
+    ),
+    createChatbot(
+      "CHEVCAST",
+      TWITCH_CHANNELS.split(","),
+      DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
+    )
+  ]);
+  console.log("> Chatbots are now active.");
 
 })().catch(console.log);

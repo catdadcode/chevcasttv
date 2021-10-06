@@ -12,3 +12,4 @@ export { default as LogoutIcon } from "@mui/icons-material/Logout";
 
 // Custom Components
 export { default as Layout } from "./Layout";
+export { default as HeroSection } from "./HeroSection";

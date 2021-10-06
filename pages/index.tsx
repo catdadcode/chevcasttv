@@ -1,10 +1,12 @@
 import type { NextPage } from 'next'
-import { Button } from "components";
+import { HeroSection } from "components";
 
 const Home: NextPage = () => {
   return (
-    <Button variant="contained" color="success" size="large">Click Me!</Button>
-  )
+    <>
+      <HeroSection />
+    </>
+  );
 }
 
 export default Home
