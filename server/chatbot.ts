@@ -55,12 +55,12 @@ const createChatbot = async (name: string, twitchChannels: string[], discordChan
   log("TTS queue function created.");
 
   log("Subscribing to Twitch channels...");
-  await Promise.all(twitchChannels.map(channel => 
-    onMessage(channel, (username, message, self) => {
+  for (const channel of twitchChannels) {
+    await onMessage(channel, (username, message) => {
       ttsQueue.unshift({ username, message });
       processQueue();
     })
-  ));
+  }
 
   log("Joining Discord voice channel...");
   const readyMsg = (channels: any) => `Chevbot is now listening to Twitch chat for ${channels}!`;

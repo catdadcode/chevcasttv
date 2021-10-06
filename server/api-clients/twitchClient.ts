@@ -14,7 +14,8 @@ export const initialize = async () => {
 type MessageHandler = (username: string, message: string, self: boolean) => void;
 const messageHandlers: Record<string, MessageHandler[]> = {};
 export const onMessage = async (channel: string, handler: MessageHandler) => {
-  const currentChannels = twitchClient.getChannels();
+  channel = channel.toLowerCase();
+  const currentChannels = Object.keys(messageHandlers);
   if (!currentChannels.includes(channel)) {
     await twitchClient.join(channel);
     log(`Twitch client now monitoring channel for ${channel}.`);
@@ -37,7 +38,7 @@ export const onMessage = async (channel: string, handler: MessageHandler) => {
 };
 
 twitchClient.on("message", (channel, tags, message, self) => {
-  const handlers = messageHandlers[channel];
+  const handlers = messageHandlers[channel.slice(1)];
   if (!handlers) return;
   handlers.forEach(handler => handler(tags["display-name"]! as string, message, self));
 });

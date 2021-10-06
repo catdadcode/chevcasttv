@@ -14,8 +14,8 @@ export const initialize = async () => {
   log("Initializing Google text to speech client...");
   const [{voices}] = await googleTTSClient.listVoices();
   if (!voices || voices.length === 0) throw new Error("Problem retrieving available Google TTS voices.");
-  englishVoices.concat(
-    voices
+  englishVoices.push(
+    ...voices
       .filter(voice => voice.languageCodes?.[0].match(/^en-/) && typeof voice.name === "string")
       .map(voice => voice.name!)
   );
