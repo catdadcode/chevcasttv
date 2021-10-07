@@ -1,14 +1,11 @@
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
-import { onMessage } from "./api-clients/twitchClient";
+import { subscribeToMessages } from "./api-clients/twitchClient";
 import logger from "./logger";
 
-const createChatbot = async (name: string, twitchChannels: string[], discordChannelId: string) => {
+export default class Chatbot {
 
-  const log = logger.extend(`CHATBOT:${name}`);
-
-  // Hard-coded values for pre-reserved voices.
-  const userVoice: Record<string, string> = {
+  private userVoices: Record<string, string> = {
     "alopex_art": "en-GB-Standard-A",
     "ChevCast": "en-US-Wavenet-I",//"en-US-Wavenet-J",
     "Codemanis": "en-AU-Standard-B",
@@ -17,106 +14,87 @@ const createChatbot = async (name: string, twitchChannels: string[], discordChan
     "noobpieces": "en-IN-Wavenet-D"
   };
 
-  log("Filling available voices...");
-  let availableVoices: string[] = [];
-  const fillAvailableVoices = () => { 
-    availableVoices = [...englishVoices.filter(voice => !Object.values(userVoice).includes(voice))]; 
-    shuffle(availableVoices);
-  }
-  fillAvailableVoices();
-  log(`${availableVoices.length} voices available.`);
+  private availableVoices: string[] = [];
+  private currentUser?: string;
+  private voiceContextTimeout?: NodeJS.Timeout;
+  private ttsQueue: { username: string, message: string }[] = [];
+  private queueInProgress = false;
+  private log: debug.Debugger;
 
-  log("Configuring TTS queue function...");
-  let currentUser: string | undefined;
-  let timeoutId: NodeJS.Timeout | undefined;
-  availableVoices = availableVoices.filter(voice => Object.values(userVoice).includes(voice));
-  const ttsQueue: { username: string, message: string }[] = [];
-  let queueInProgress = false;
-  const processQueue = async () => {
-    if (queueInProgress) return;
-    queueInProgress = true;
-    while (ttsQueue.length > 0) {
-      const { username, message } = ttsQueue.pop()!;
-      let voice: string | undefined = userVoice[username];
+  constructor(private name: string, private twitchChannels: string[], private discordChannelId: string) {
+    this.log = logger.extend(`CHATBOT:${name}`);
+    this.initialize().catch(console.log);
+  }
+
+  async initialize() {
+    this.log("Subscribing to Twitch channels...");
+    await subscribeToMessages(this.twitchChannels, this.queueMessage);
+
+    this.log("Joining Discord voice channel...");
+    const readyMsg = (channels: any) => `Chevbot is now listening to Twitch chat for ${channels}!`;
+    this.log(readyMsg(this.twitchChannels.join(", ")));
+    const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername).join(", ")));
+    await playAudio(this.discordChannelId, audioContent);
+  }
+
+  fillAvailableVoices() {
+    this.log("Filling available voices...");
+    this.availableVoices = [...englishVoices.filter(voice =>
+      !Object.values(this.userVoices).includes(voice))];
+
+    // Shuffle voices to ensure variety.
+    let currentIndex = this.availableVoices.length;
+    let randomIndex;
+    while (currentIndex != 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+      [
+        this.availableVoices[currentIndex],
+        this.availableVoices[randomIndex]
+      ] = [
+        this.availableVoices[randomIndex],
+        this.availableVoices[currentIndex]
+      ];
+    }
+    this.log(`${this.availableVoices.length} voices available.`);
+  }
+
+  queueMessage(username: string, message: string) {
+    this.ttsQueue.unshift({ username, message });
+    this.processQueue();
+  }
+
+  async processQueue() {
+    if (this.queueInProgress) return;
+    this.queueInProgress = true;
+    while (this.ttsQueue.length > 0) {
+      const { username, message } = this.ttsQueue.pop()!;
+      let voice: string | undefined = this.userVoices[username];
       if (!voice) {
-        voice = userVoice[username] = availableVoices.pop()!;
-        if (availableVoices.length === 0) {
-          fillAvailableVoices();
+        voice = this.userVoices[username] = this.availableVoices.pop()!;
+        if (this.availableVoices.length === 0) {
+          this.fillAvailableVoices();
         }
       }
-      const ttsMessage = username === currentUser || message.startsWith("ALEXA") ? message : `${enunciateUsername(username)} says ${message}`;
+      const ttsMessage = username === this.currentUser || message.startsWith("ALEXA")
+        ? message : `${this.enunciateUsername(username)} says ${message}`;
       const audioContent = await createAudio(ttsMessage, voice);
-      await playAudio(discordChannelId, audioContent);
-      currentUser = username;
-      if (timeoutId) clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => currentUser = undefined, 45e3);
+      await playAudio(this.discordChannelId, audioContent);
+      this.currentUser = username;
+      if (this.voiceContextTimeout) clearTimeout(this.voiceContextTimeout);
+      this.voiceContextTimeout = setTimeout(() => this.currentUser = undefined, 45e3);
     }
-    queueInProgress = false;
-  };
-  log("TTS queue function created.");
-
-  log("Subscribing to Twitch channels...");
-  for (const channel of twitchChannels) {
-    await onMessage(channel, (username, message) => {
-      ttsQueue.unshift({ username, message });
-      processQueue();
-    });
+    this.queueInProgress = false;
   }
 
-  log("Joining Discord voice channel...");
-  const readyMsg = (channels: any) => `Chevbot is now listening to Twitch chat for ${channels}!`;
-  log(readyMsg(twitchChannels.join(", ")));
-  const audioContent = await createAudio(readyMsg(twitchChannels.map(cleanUsername).join(", ")));
-  await playAudio(discordChannelId, audioContent);
-  
-  // const testVoices = englishVoices!;
-  // const testVoices = ["en-GB-Standard-A"];
-  // audioContent = await createAudio(`There are ${testVoices.length} voices available.`);
-  // await playAudio(discordChannelId, audioContent);
-  // await keypress();
-  // for (let index=0; index < testVoices.length; index++) {
-  //   const voice = testVoices[index];
-  //   const msg = `Voice ${index}: Hi this is Alopex`;
-  //   console.log(`Voice ${index}: ${voice}`);
-  //   await playAudio(discordChannelId, await createAudio(msg, voice));
-  //   await keypress();
-  // }
-};
-
-// async function keypress() {
-//   process.stdin.setRawMode(true);
-//   return new Promise<void>(resolve => process.stdin.once('data', () => {
-//     process.stdin.setRawMode(false);
-//     resolve();
-//   }));
-// }
-
-function cleanUsername(username: string) {
-  return username.replace(/(\d+|[_-])/g, " ");
-}
-
-function enunciateUsername(username: string) {
-  username = cleanUsername(username);
-  // if (username.includes(" ")) username = username.slice(0, username.indexOf(" "));
-  return username;
-}
-
-function shuffle(array: any[]) {
-  let currentIndex = array.length,  randomIndex;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
+  cleanUsername(username: string) {
+    return username.replace(/(\d+|[_-])/g, " ");
   }
 
-  return array;
-};
+  enunciateUsername(username: string) {
+    username = this.cleanUsername(username);
+    // if (username.includes(" ")) username = username.slice(0, username.indexOf(" "));
+    return username;
+  }
 
-export default createChatbot;
+}

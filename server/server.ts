@@ -12,7 +12,7 @@ import logger from "./logger";
 import { initialize as initDiscord } from "./api-clients/discordClient";
 import { initialize as initGoogleTTS } from "./api-clients/googleTTSClient";
 import { initialize as initTwitch } from "./api-clients/twitchClient";
-import createChatbot from "./chatbot";
+import Chatbot from "./chatbot";
 
 const log = logger.extend("SERVER");
 
@@ -52,16 +52,16 @@ const {
 
   log("Starting chatbot...");
   await Promise.all([
-    createChatbot(
+    new Chatbot(
       "WATERCOOLER",
       TWITCH_CHANNELS.split(","),
       DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID
-    ),
-    createChatbot(
+    ).initialize(),
+    new Chatbot(
       "CHEVCAST",
       TWITCH_CHANNELS.split(","),
       DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-    )
+    ).initialize()
   ]);
   console.log("> Chatbots are now active.");
 

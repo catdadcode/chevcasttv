@@ -30,7 +30,7 @@ export const initialize = async () => {
 };
 
 const voiceConnections: Record<Snowflake, VoiceConnection> = {};
-export const joinVoice = async (channelId: Snowflake) => {
+const joinVoice = async (channelId: Snowflake) => {
   log(`Discord client joining voice channel ${channelId}...`);
   const channel = (discordClient.channels.cache.get(channelId) ?? await discordClient.channels.fetch(channelId)) as VoiceChannel;
   const connection = await joinVoiceChannel({

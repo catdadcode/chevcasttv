@@ -11,34 +11,63 @@ export const initialize = async () => {
   log("Twitch client ready.");
 };
 
-type MessageHandler = (username: string, message: string, self: boolean) => void;
-const messageHandlers: Record<string, MessageHandler[]> = {};
-export const onMessage = async (channel: string, handler: MessageHandler) => {
-  channel = channel.toLowerCase();
-  const currentChannels = Object.keys(messageHandlers);
-  if (!currentChannels.includes(channel)) {
-    await twitchClient.join(channel);
-    log(`Twitch client now monitoring channel for ${channel}.`);
+type MessageHandler = (username: string, message: string, channel: string) => void;
+type Subscription = [channels: string[], handler: MessageHandler];
+const subscriptions: Subscription[] = [];
+export const subscribeToMessages = async (channels: string[], handler: MessageHandler) => {
+
+  // Check if client is already in provided channels.
+  const currentChannels = twitchClient.getChannels().map(channel => channel.slice(1));
+  for (const channel of channels) {
+    // If client is not in channel then join.
+    if (!currentChannels.includes(channel)) {
+      await twitchClient.join(channel);
+      log(`Twitch client joined channel: ${channel}`);
+    }
   }
-  let handlers = messageHandlers[channel];
-  if (!handlers) {
-    handlers = messageHandlers[channel] = [handler];
-  } else {
-    handlers.push(handler);
-  }
+
+  // Track new subscription.
+  const subscription: Subscription = [channels, handler];
+  subscriptions.push(subscription);
+
+  // Create method to unsubscribe this subscription later.
   const unsubscribe = async () => {
-    handlers.splice(handlers.indexOf(handler), 1);
-    if (handlers.length === 0) {
-      delete messageHandlers[channel];
-      await twitchClient.part(channel);
-      log(`Twitch client no longer monitoring channel for ${channel}.`);
+    
+    // Remove subscription
+    const subIndex = subscriptions.findIndex(s => s === subscription);
+    subscriptions.splice(subIndex, 1);
+
+    // Get list of all remaining subscription channels.
+    const remainingSubChannels = subscriptions.map(([subChannels]) => subChannels)
+      .reduce((remainingChannels, subChannels) => {
+        for (const subChannel of subChannels) {
+          if (!remainingChannels.includes(subChannel)) {
+            remainingChannels.push(subChannel);
+          }
+        }
+        return remainingChannels;
+      }, [] as string[]);
+    const currentChannels = twitchClient.getChannels().map(channel => channel.slice(1));
+
+    // Leave channels that are not in remaining subscriptions.
+    for (const currentChannel of currentChannels) {
+      if (!remainingSubChannels.includes(currentChannel)) {
+        await twitchClient.part(currentChannel);
+        log(`Twitch client left channel: ${currentChannel}`);
+      }
     }
   };
   return unsubscribe;
 };
 
-twitchClient.on("message", (channel, tags, message, self) => {
-  const handlers = messageHandlers[channel.slice(1)];
-  if (!handlers) return;
-  handlers.forEach(handler => handler(tags["display-name"]! as string, message, self));
+twitchClient.on("message", (channel, tags, message) => {
+  channel = channel.slice(1);
+  // Find all message handlers that are subscribed to this message's channel.
+  const handlers = subscriptions
+    .filter(([subChannels]) => subChannels.includes(channel))
+    .map(([,subHandler]) => subHandler);
+  if (!handlers || handlers.length === 0) return;
+
+  // Invoke each handler that is subscribed to messages in this channel.
+  handlers.forEach(handler => handler(tags["display-name"]! as string, message, channel));
 });
