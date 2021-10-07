@@ -23,14 +23,11 @@ export default class Chatbot {
 
   constructor(private name: string, private twitchChannels: string[], private discordChannelId: string) {
     this.log = logger.extend(`CHATBOT:${name}`);
-    this.initialize().catch(console.log);
   }
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    await subscribeToMessages(this.twitchChannels, this.queueMessage);
-
-    this.log("Joining Discord voice channel...");
+    await subscribeToMessages(this.twitchChannels, this.queueMessage.bind(this));
     const readyMsg = (channels: any) => `Chevbot is now listening to Twitch chat for ${channels}!`;
     this.log(readyMsg(this.twitchChannels.join(", ")));
     const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername).join(", ")));
