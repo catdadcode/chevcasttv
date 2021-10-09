@@ -1,6 +1,6 @@
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
-import { subscribeToMessages } from "./api-clients/twitchClient";
+import { listenToChannels } from "./api-clients/twitchClient";
 import logger from "./logger";
 
 export default class Chatbot {
@@ -27,7 +27,7 @@ export default class Chatbot {
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    await subscribeToMessages(this.twitchChannels, this.queueMessage.bind(this));
+    await listenToChannels(this.twitchChannels, this.queueMessage.bind(this));
     const readyMsg = (channels: any) => `Chevbot is now listening to Twitch chat for ${channels}!`;
     this.log(readyMsg(this.twitchChannels.join(", ")));
     const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername).join(", ")));

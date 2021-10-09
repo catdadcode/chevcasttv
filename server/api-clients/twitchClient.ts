@@ -14,7 +14,7 @@ export const initialize = async () => {
 type MessageHandler = (username: string, message: string, channel: string) => void;
 type Subscription = [channels: string[], handler: MessageHandler];
 const subscriptions: Subscription[] = [];
-export const subscribeToChannels = async (channels: string[], handler: MessageHandler) => {
+export const listenToChannels = async (channels: string[], handler: MessageHandler) => {
 
   // Check if client is already in provided channels.
   const currentChannels = twitchClient.getChannels().map(channel => channel.slice(1));
