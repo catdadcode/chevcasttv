@@ -21,16 +21,21 @@ export default class Chatbot {
   private queueInProgress = false;
   private log: debug.Debugger;
 
-  constructor(private name: string, private twitchChannels: string[], private discordChannelId: string) {
+  constructor(name: string, private twitchChannels: string[], private discordChannelId: string) {
     this.log = logger.extend(`CHATBOT:${name}`);
   }
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
     await listenToChannels(this.twitchChannels, this.queueMessage.bind(this));
-    const readyMsg = (channels: any) => `Chevbot is now listening to Twitch chat for ${channels}!`;
-    this.log(readyMsg(this.twitchChannels.join(", ")));
-    const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername).join(", ")));
+    const readyMsg = (twitchChannels: string[]) => {
+      const channels = [...twitchChannels];
+      if (channels.length === 1) return `Chevbot is now listening to Twitch chat for ${channels.pop()}!`;
+      const lastChannel = channels.pop();
+      return `Chevbot is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;
+    }
+    this.log(readyMsg(this.twitchChannels));
+    const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername)));
     await playAudio(this.discordChannelId, audioContent);
   }
 

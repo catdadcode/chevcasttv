@@ -7,12 +7,12 @@
     "build": "run-s lint && run-p build:*",
     "build:client": "next build",
     "build:server": "run-s clean && tsc -p ./tsconfig.server.json",
-    "dev": "TS_NODE_PROJECT=tsconfig.server.json DEBUG=CHEVCASTTV:* nodemon -i ./ -w ./server/ -- ./server/server.ts",
+    "dev": "TS_NODE_PROJECT=tsconfig.server.json DEBUG=CHEVCASTTV:* nodemon -w ./server -- ./server/server.ts",
     "lint": "next lint",
     "start": "NODE_ENV=production node ./server/server.js"
   },
   "dependencies": {
-    "@chevtek/react-state-container": "^5.0.2",
+    "@chevtek/react-state-container": "^6.0.1",
     "@discordjs/opus": "^0.5.3",
     "@discordjs/voice": "^0.6.0",
     "@emotion/react": "^11.4.1",
