@@ -4,7 +4,7 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { Layout } from "components";
 import ThemeProvider from "styles/theme";
-import { SettingsProvider } from "hooks/useSettings";
+import { AppStateProvider } from "hooks/useAppState";
 
 const App = ({
   Component,
@@ -12,7 +12,7 @@ const App = ({
 }: AppProps) => {
   return(
     <SessionProvider session={session}>
-      <SettingsProvider>
+      <AppStateProvider>
         <ThemeProvider>
           <Head>
             <title>ChevCast.tv</title>
@@ -23,7 +23,7 @@ const App = ({
             <Component {...pageProps} />
           </Layout>
         </ThemeProvider>
-      </SettingsProvider>
+      </AppStateProvider>
     </SessionProvider>
   );
 };

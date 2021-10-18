@@ -9,7 +9,7 @@ export const HeroContainer: FC = ({children}) => <Box
     justifyContent: "center",
     alignItems: "center",
     padding: "0 30px",
-    height: "800px",
+    minHeight: "300px",
     position: "relative",
     zIndex: 1
   }}

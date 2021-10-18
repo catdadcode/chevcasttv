@@ -1,20 +1,30 @@
-import React, { useState, FC } from "react";
+import React, { FC } from "react";
+import { useRouter } from "next/router";
 import { Tabs, Tab } from "components";
-import { SxProps } from "@mui/system";
-
-type TabValue = "home" | "chevbot" | "videos";
 
 const TabNav: FC = () => {
-  const [tab, setTab] = useState<TabValue>("home");
+  const router = useRouter();
+
+  let tabValue;
+  switch (router.pathname) {
+    case "/":
+    case "/chevbot":
+    case "/videos":
+      tabValue = router.pathname;
+      break;
+    default:
+      tabValue = false;
+      break;
+  }
 
   return (
     <Tabs
-      value={tab}
-      onChange={(e, value) => setTab(value)}
+      value={tabValue}
+      onChange={(e, page) => router.push(page)}
     >
-      <Tab value="home" label="Home" />
-      <Tab value="chevbot" label="Chevbot" />
-      <Tab value="videos" label="Videos" />
+      <Tab value="/" label="Home" />
+      <Tab value="/chevbot" label="Chevbot" />
+      <Tab value="/videos" label="Videos" />
     </Tabs>
   );
 }
