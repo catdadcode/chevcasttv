@@ -1,7 +1,7 @@
 import { Db, ObjectId } from "mongodb";
 
 export type Account = {
-  _id: ObjectId;
+  _id?: ObjectId;
   provider: "discord";
   type: "oauth";
   providerAccountId: string;
@@ -31,7 +31,9 @@ const initialize = (db: Db): AccountRepository => ({
   },
 
   updateAccount: async (account: Account) => {
-    await db.collection("accounts").updateOne({ _id: new ObjectId(account._id) }, account);
+    const accountId = account._id;
+    delete account._id;
+    await db.collection("accounts").updateOne({ _id: new ObjectId(accountId) }, { $set: account });
   }
 
 });

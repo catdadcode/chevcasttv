@@ -49,9 +49,8 @@ export default class Chatbot {
     ]);
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
-      if (channels.length === 1) return `Chevbot is now listening to Twitch chat for ${channels.pop()}!`;
-      const lastChannel = channels.pop();
-      return `Chevbot is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;
+      if (channels.length === 1) return `Chevbot is now listening to Twitch chat for ${channels.join(", ")}, and Restream chat for ChevCast!`;
+      return `Chevbot is now listening to Twitch chat for ${channels.join(", ")}, and Restream chat for ChevCast!`;
     }
     this.log(readyMsg(this.twitchChannels));
     const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername)));
