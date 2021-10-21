@@ -1,12 +1,19 @@
-import { MongoClient } from "mongodb"
+import client from "./client";
 import config from "config";
+import initAccounts, { AccountRepository } from "./repositories/accounts";
 
-const { MONGODB_CONNECTION_STRING } = config;
+const { DATABASE_NAME } = config;
 
-let client = global._mongoClient =  global._mongoClient ?? new MongoClient(MONGODB_CONNECTION_STRING);
+type Repositories = {
+  accounts: AccountRepository;
+};
 
-export const initDb = async () => {
-  return client.connect();
-}
+const repositories: Partial<Repositories> = {};
 
-export default client;
+export const initialize = async () => {
+  await client.connect();
+  const db = client.db(DATABASE_NAME);
+  repositories.accounts = initAccounts(db);
+};
+
+export default repositories as Repositories;

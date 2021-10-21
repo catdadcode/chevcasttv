@@ -1,13 +1,24 @@
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
-import { listenToChannels } from "./api-clients/twitchClient";
+import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
+import { listen as restreamListen } from "./api-clients/restreamClient";
 import logger from "./logger";
+
+type Options = {
+  twitchChannels: string[];
+  discordChannelIds: string[];
+};
 
 export default class Chatbot {
 
   private userVoices: Record<string, string> = {
+    "ChevCast": "en-US-Wavenet-I",
+    "chevcast": "en-US-Wavenet-I",
+    "Chev": "en-US-Wavenet-I",
+    "chev": "en-US-Wavenet-I",
+    "Alex Ford": "en-US-Wavenet-I",
+    "alex ford": "en-US-Wavenet-I",
     "alopex_art": "en-GB-Standard-A",
-    "ChevCast": "en-US-Wavenet-I",//"en-US-Wavenet-J",
     "Codemanis": "en-AU-Standard-B",
     "Ember_Stone": "en-US-Wavenet-H",
     "harlequindollface": "en-US-Wavenet-F",
@@ -16,18 +27,26 @@ export default class Chatbot {
 
   private availableVoices: string[] = [];
   private currentUser?: string;
-  private voiceContextTimeout?: NodeJS.Timeout;
-  private ttsQueue: { username: string, message: string }[] = [];
-  private queueInProgress = false;
+  private discordChannelIds: string[];
   private log: debug.Debugger;
+  private ttsQueue: { username: string, message: string }[] = [];
+  private twitchChannels: string[];
+  private voiceContextTimeout?: NodeJS.Timeout;
+  private queueInProgress = false;
 
-  constructor(name: string, private twitchChannels: string[], private discordChannelId: string) {
-    this.log = logger.extend(`CHATBOT:${name}`);
+  constructor(options: Options) {
+    const { twitchChannels, discordChannelIds } = options;
+    this.discordChannelIds = discordChannelIds;
+    this.twitchChannels = twitchChannels;
+    this.log = logger.extend("CHATBOT");
   }
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    await listenToChannels(this.twitchChannels, this.queueMessage.bind(this));
+    await Promise.all([
+      twitchListen(this.twitchChannels, this.queueMessage.bind(this)),
+      restreamListen(this.queueMessage.bind(this))
+    ]);
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
       if (channels.length === 1) return `Chevbot is now listening to Twitch chat for ${channels.pop()}!`;
@@ -36,7 +55,11 @@ export default class Chatbot {
     }
     this.log(readyMsg(this.twitchChannels));
     const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername)));
-    await playAudio(this.discordChannelId, audioContent);
+    await this.sendTTS(audioContent);
+  }
+
+  async sendTTS(audioContent: Buffer) {
+    return Promise.all(this.discordChannelIds.map(channelId => playAudio(channelId, audioContent)));
   }
 
   fillAvailableVoices() {
@@ -81,7 +104,7 @@ export default class Chatbot {
       const ttsMessage = username === this.currentUser || message.startsWith("ALEXA")
         ? message : `${this.enunciateUsername(username)} says ${message}`;
       const audioContent = await createAudio(ttsMessage, voice);
-      await playAudio(this.discordChannelId, audioContent);
+      await this.sendTTS(audioContent);
       this.currentUser = username;
       if (this.voiceContextTimeout) clearTimeout(this.voiceContextTimeout);
       this.voiceContextTimeout = setTimeout(() => this.currentUser = undefined, 45e3);

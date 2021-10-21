@@ -33,6 +33,7 @@
     "ffmpeg-static": "^4.4.0",
     "hooks": "file:hooks",
     "libsodium-wrappers": "^0.7.9",
+    "moment": "^2.29.1",
     "mongodb": "^4.1.2",
     "next": "11.1.2",
     "next-auth": "^4.0.0-beta.4",
@@ -40,12 +41,14 @@
     "react-dom": "17.0.2",
     "styles": "file:styles",
     "tmi.js": "^1.8.5",
-    "types": "file:types"
+    "types": "file:types",
+    "websocket": "^1.0.34"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
     "@types/react": "17.0.20",
     "@types/tmi.js": "^1.7.2",
+    "@types/websocket": "^1.0.4",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
     "nodemon": "^2.0.13",

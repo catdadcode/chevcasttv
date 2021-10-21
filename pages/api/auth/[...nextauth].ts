@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import dbClient from "db";
+import dbClient from "db/client";
 import config from "config";
 
 const {

@@ -7,11 +7,12 @@ import { createServer } from "http";
 import { parse } from "url";
 import next from "next";
 import config from "config";
-import { initDb } from "db";
+import { initialize as initDb } from "db";
 import logger from "./logger";
 import { initialize as initDiscord } from "./api-clients/discordClient";
 import { initialize as initGoogleTTS } from "./api-clients/googleTTSClient";
 import { initialize as initTwitch } from "./api-clients/twitchClient";
+import { initialize as initRestream } from "./api-clients/restreamClient";
 import Chatbot from "./chatbot";
 
 const log = logger.extend("SERVER");
@@ -46,23 +47,19 @@ const {
   await Promise.all([
     initDiscord(),
     initGoogleTTS(),
-    initTwitch()
+    initTwitch(),
+    initRestream()
   ]);
   log("API clients ready.");
 
   log("Starting chatbot...");
-  await Promise.all([
-    new Chatbot(
-      "WATERCOOLER",
-      TWITCH_CHANNELS.split(","),
-      DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID
-    ).initialize(),
-    new Chatbot(
-      "CHEVCAST",
-      TWITCH_CHANNELS.split(","),
+  await new Chatbot({
+    twitchChannels: TWITCH_CHANNELS.split(","),
+    discordChannelIds: [
+      DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
       DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-    ).initialize()
-  ]);
+    ]
+  }).initialize();
   console.log("> Chatbots are now active.");
 
 })().catch(console.log);
