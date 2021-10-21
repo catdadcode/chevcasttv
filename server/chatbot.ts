@@ -12,15 +12,12 @@ type Options = {
 export default class Chatbot {
 
   private userVoices: Record<string, string> = {
-    "ChevCast": "en-US-Wavenet-I",
     "chevcast": "en-US-Wavenet-I",
-    "Chev": "en-US-Wavenet-I",
     "chev": "en-US-Wavenet-I",
-    "Alex Ford": "en-US-Wavenet-I",
     "alex ford": "en-US-Wavenet-I",
     "alopex_art": "en-GB-Standard-A",
-    "Codemanis": "en-AU-Standard-B",
-    "Ember_Stone": "en-US-Wavenet-H",
+    "codemanis": "en-AU-Standard-B",
+    "ember_stone": "en-US-Wavenet-H",
     "harlequindollface": "en-US-Wavenet-F",
     "noobpieces": "en-IN-Wavenet-D"
   };
@@ -64,7 +61,7 @@ export default class Chatbot {
   fillAvailableVoices() {
     this.log("Filling available voices...");
     this.availableVoices = [...englishVoices.filter(voice =>
-      !Object.values(this.userVoices).includes(voice))];
+      !Object.values(this.userVoices).includes(voice.toLowerCase()))];
 
     // Shuffle voices to ensure variety.
     let currentIndex = this.availableVoices.length;
@@ -93,9 +90,9 @@ export default class Chatbot {
     this.queueInProgress = true;
     while (this.ttsQueue.length > 0) {
       const { username, message } = this.ttsQueue.pop()!;
-      let voice: string | undefined = this.userVoices[username];
+      let voice: string | undefined = this.userVoices[username.toLowerCase()];
       if (!voice) {
-        voice = this.userVoices[username] = this.availableVoices.pop()!;
+        voice = this.userVoices[username.toLowerCase()] = this.availableVoices.pop()!;
         if (this.availableVoices.length === 0) {
           this.fillAvailableVoices();
         }
