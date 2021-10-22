@@ -1,5 +1,6 @@
 const configKeys = [ 
   "APP_URL",
+  "CONTEXT_TIMEOUT",
   "DATABASE_NAME",
   "DISCORD_BOT_TOKEN",
   "DISCORD_CHEVCAST_GUILD_ID",

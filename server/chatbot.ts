@@ -3,6 +3,11 @@ import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
 import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
 import { listen as restreamListen } from "./api-clients/restreamClient";
 import logger from "./logger";
+import config from "config";
+
+const {
+  CONTEXT_TIMEOUT
+} = config;
 
 type Options = {
   twitchChannels: string[];
@@ -103,7 +108,7 @@ export default class Chatbot {
       await this.sendTTS(audioContent);
       this.currentUser = username;
       if (this.voiceContextTimeout) clearTimeout(this.voiceContextTimeout);
-      this.voiceContextTimeout = setTimeout(() => this.currentUser = undefined, 45e3);
+      this.voiceContextTimeout = setTimeout(() => this.currentUser = undefined, parseInt(CONTEXT_TIMEOUT) * 1000);
     }
     this.queueInProgress = false;
   }
