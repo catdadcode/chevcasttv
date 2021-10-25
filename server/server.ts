@@ -22,7 +22,11 @@ const {
   NODE_ENV,
   DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID,
   DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
-  TWITCH_CHANNELS
+  DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID,
+  DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID,
+  CHEV_TWITCH_CHANNELS,
+  EMBER_TWITCH_CHANNELS,
+  AZULA_TWITCH_CHANNELS
 } = config;
 
 (async () => {
@@ -53,13 +57,24 @@ const {
   log("API clients ready.");
 
   log("Starting chatbot...");
-  await new Chatbot({
-    twitchChannels: TWITCH_CHANNELS.split(","),
-    discordChannelIds: [
-      DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
-      DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-    ]
-  }).initialize();
+  await Promise.all([
+    new Chatbot({
+      twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
+      discordChannelIds: [
+        DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
+        DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
+      ],
+      restream: true
+    }).initialize(),
+    new Chatbot({
+      twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
+      discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
+    }).initialize(),
+    new Chatbot({
+      twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
+      discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+    }).initialize()
+  ]);
   console.log("> Chatbots are now active.");
 
 })().catch(console.log);
