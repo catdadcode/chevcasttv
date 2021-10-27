@@ -42,3 +42,4 @@ export { default as TabNav } from "./NavBar/TabNav";
 
 // Custom Icons
 export { default as DiscordIcon } from "./icons/Discord";
+export { default as NeonControllerIcon } from "./icons/NeonController";

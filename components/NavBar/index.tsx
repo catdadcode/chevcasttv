@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useRouter } from "next/router";
 import { useSession, signIn } from "next-auth/react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -11,8 +12,8 @@ import {
   DiscordIcon,
   DrawerNav,
   IconButton,
-  // LoginIcon,
   MenuIcon,
+  NeonControllerIcon,
   TabNav,
   Toolbar,
   Typography,
@@ -23,6 +24,7 @@ const NavBar = () => {
   const { dispatch } = useAppState();
   const { data } = useSession();
   const theme = useTheme();
+  const router = useRouter();
   const smDownBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
   const $userMenuAnchor = useRef<HTMLButtonElement>(null);
 
@@ -48,6 +50,18 @@ const NavBar = () => {
               <DrawerNav />
             </>
           }
+
+          <IconButton
+            size="large"
+            color="success"
+            onClick={() => router.push("/")}
+            sx={{
+              width: 100,
+              mr: 3
+            }}
+          >
+            <NeonControllerIcon />
+          </IconButton>
 
           { !smDownBreakpoint && <TabNav /> }
 
@@ -83,7 +97,7 @@ const NavBar = () => {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<DiscordIcon />}
+                startIcon={<DiscordIcon color="#333" />}
                 onClick={() => signIn("discord")}
               >Sign In</Button>
             }

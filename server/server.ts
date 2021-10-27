@@ -57,24 +57,35 @@ const {
   log("API clients ready.");
 
   log("Starting chatbot...");
-  await Promise.all([
-    new Chatbot({
+  if (NODE_ENV === "production") {
+    await Promise.all([
+      new Chatbot({
+        twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [
+          DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
+          DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
+        ],
+        restream: true
+      }).initialize(),
+      new Chatbot({
+        twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize(),
+      new Chatbot({
+        twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize()
+    ]);
+  } else {
+    await new Chatbot({
       twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
       discordChannelIds: [
         DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
         DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
       ],
       restream: true
-    }).initialize(),
-    new Chatbot({
-      twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
-      discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
-    }).initialize(),
-    new Chatbot({
-      twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
-      discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
-    }).initialize()
-  ]);
+    }).initialize();
+  }
   console.log("> Chatbots are now active.");
 
 })().catch(console.log);

@@ -10,3 +10,18 @@ body {
 * {
   box-sizing: border-box;
 }
+
+@font-face {
+  font-family: neon;
+  src: url("/fonts/Clip.ttf");
+}
+
+@keyframes wobble {
+  from {
+    transform: rotateZ(-5deg);
+  }
+
+  to {
+    transform: rotateZ(5deg);
+  }
+}
