@@ -32,6 +32,7 @@ let connection: WebSocketConnection;
 const listenHandlers: ListenHandler[] = [];
 
 const validateToken = async () => {
+  log("Validating restream access token...");
   if (!account) {
     account = await db.accounts.getAccountByUserId(chevId);
   }
@@ -40,8 +41,10 @@ const validateToken = async () => {
   const now = moment();
   const expiration = moment(expiresAt);
   if (now.isBefore(expiration.subtract(30, "seconds"))) {
+    log("Token is valid and not expired. No need to validate.");
     return;
   }
+  log("Token has expired. Refreshing access token...");
   const credentials = Buffer.from(`${RESTREAM_CLIENT_ID}:${RESTREAM_CLIENT_SECRET}`).toString("base64");
   const { data } = await axios.post(
     `${RESTREAM_API_URL}/oauth/token`,
@@ -63,16 +66,25 @@ const validateToken = async () => {
       expiresAt: data.accessTokenExpiresAt
     }
   });
+  log("Token refreshed. Updating database...");
   await db.accounts.updateAccount(account);
+  log("Database updated with new token.");
 };
 
 export const initialize = async () => {
   await validateToken();
   const wsClient = new WebSocketClient();
+  log("Connecting to restream chat websocket...");
   wsClient.connect(`${RESTREAM_CHAT_WEBSOCKET}?accessToken=${account?.restream.accessToken}`);
   connection = await new Promise((resolve, reject) => {
-    wsClient.once("connect", resolve);
-    wsClient.once("connectFailed", reject);
+    wsClient.once("connect", connection => {
+      log("Websocket connected.");
+      resolve(connection);
+    });
+    wsClient.once("connectFailed", err => {
+      log(`Websocket connection failed: ${err}.`);
+      reject(err);
+    });
   });
 
   connection.on("message", (message: WebSocketMessage) => {
@@ -82,6 +94,7 @@ export const initialize = async () => {
     if (action === "event") {
       const { author, text } = eventPayload;
       const username = author.displayName ?? author.nickname ?? author.name;
+      log(`${author}: "${message}"`);
       for (const handler of listenHandlers) {
         handler(username, text);
       }

@@ -49,10 +49,14 @@ export default class Chatbot {
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    await Promise.all([
-      twitchListen(this.twitchChannels, this.queueMessage.bind(this)),
-      () => this.restream && restreamListen(this.queueMessage.bind(this))
-    ]);
+    if (this.restream) {
+      await Promise.all([
+        twitchListen(this.twitchChannels, this.queueMessage.bind(this)),
+        restreamListen(this.queueMessage.bind(this))
+      ]);
+    } else {
+      await twitchListen(this.twitchChannels, this.queueMessage.bind(this));
+    }
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
       let msg = "Chevbot is now listening";
