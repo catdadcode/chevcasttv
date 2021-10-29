@@ -41,6 +41,12 @@ const {
 
   log("Starting http server...");
   const server = createServer((req, res) => {
+    if (req.url === "/health") {
+      res.statusCode = 200;
+      res.write("Ok\n");
+      res.end();
+      return;
+    }
     const parsedUrl = parse(req.url ?? "", true);
     handle(req, res, parsedUrl);
   });
