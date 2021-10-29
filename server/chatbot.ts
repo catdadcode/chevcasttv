@@ -104,6 +104,8 @@ export default class Chatbot {
   }
 
   queueMessage(username: string, message: string) {
+    const blackList = ["streamelements", "soundalerts"];
+    if (blackList.includes(username.toLowerCase())) return;
     this.ttsQueue.unshift({ username, message });
     this.processQueue();
   }
