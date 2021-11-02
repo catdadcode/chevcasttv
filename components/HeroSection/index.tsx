@@ -57,7 +57,7 @@ const HeroSection = () => {
       },
     }}>
       <HeroBg>
-        <VideoBg autoPlay loop muted src={"/video/home-bg2.mp4"} />
+        <VideoBg autoPlay loop muted playsInline src={"/video/home-bg2.mp4"} />
       </HeroBg>
       <HeroOverlay />
       <HeroContent sx={{
