@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import ReactPlayer from "react-player";
 import {
   HeroBg,
   HeroContainer,
@@ -8,11 +9,43 @@ import {
 } from "./HeroElements";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { NeonControllerIcon, Typography } from "..";
+import {
+  Box,
+  DiscordIcon,
+  FacebookIcon,
+  IconButton,
+  NeonControllerIcon,
+  TwitchIcon,
+  TwitterIcon,
+  Typography,
+  YouTubeIcon
+} from "..";
+
+const CHEVCAST_DISCORD = process?.env.NEXT_PUBLIC_CHEVCAST_DISCORD?.toString() ?? "";
+const CHEVCAST_TWITCH = process?.env.NEXT_PUBLIC_CHEVCAST_TWITCH?.toString() ?? "";
+const CHEVCAST_YOUTUBE = process?.env.NEXT_PUBLIC_CHEVCAST_YOUTUBE?.toString() ?? "";
+const CHEVCAST_FACEBOOK = process?.env.NEXT_PUBLIC_CHEVCAST_FACEBOOK?.toString() ?? "";
+const CHEVCAST_TWITTER = process?.env.NEXT_PUBLIC_CHEVCAST_TWITTER?.toString() ?? "";
 
 const HeroSection = () => {
   const theme = useTheme();
-  const smDownBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
+  const smallScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const largeScreen = useMediaQuery(theme.breakpoints.up("xl"));
+  const [showPlayer, setShowPlayer] = useState(false);
+  const socialMediaIconStyles = {
+    [theme.breakpoints.up("md")]: {
+      height: 150,
+      width: 150
+    },
+    [theme.breakpoints.down("md")]: {
+      height: 75,
+      width: 75
+    },
+    [theme.breakpoints.down("sm")]: {
+      height: 50,
+      width: 50
+    }
+  };
   return (
     <HeroContainer>
       <HeroBg>
@@ -20,25 +53,99 @@ const HeroSection = () => {
       </HeroBg>
       <HeroOverlay />
       <HeroContent sx={{
-        animation: "5s infinite alternate wobble ease-in-out",
-        textAlign: "center",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-around",
+        justifyItems: "center",
         flexDirection: "column",
+        overflow: "hidden"
       }}>
-        <Typography variant="h4" sx={{
-          color: theme => theme.palette.success.light,
-          fontFamily: "neon",
-          textShadow: theme => `3px 3px 5px ${theme.palette.success.light}`,
-          mb: -15,
-          mt: 10
-        }}>Welcome To</Typography>
-        <Typography variant={smDownBreakpoint ? "h2" : "h1"} sx={{
-          color: "#CCFCD6",
-          fontFamily: "neon",
-          textShadow: theme => `3px 3px 7px ${theme.palette.success.light}`,
-          mb: -10,
-          mt: 15,
-        }}>ChevCast.TV</Typography>
-        <NeonControllerIcon backgroundOn />
+        { !showPlayer && <Box sx={{
+          animation: "5s infinite alternate wobble ease-in-out",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+          [theme.breakpoints.up("md")]: {
+            mt: 5
+          },
+          [theme.breakpoints.down("md")]: {
+            mt: 3
+          }
+        }}>
+          <Typography variant="h4" sx={{
+            color: theme => theme.palette.success.light,
+            fontFamily: "neon",
+            textShadow: theme => `3px 3px 5px ${theme.palette.success.light}`
+          }}>Welcome To</Typography>
+          <Typography variant={smallScreen ? "h2" : "h1"} sx={{
+            color: "#CCFCD6",
+            fontFamily: "neon",
+            textShadow: theme => `3px 3px 7px ${theme.palette.success.light}`
+          }}>ChevCast.TV</Typography>
+          <NeonControllerIcon backgroundOn sx={{
+            [theme.breakpoints.up("md")]: {
+              mt: -35,
+              mb: -25,
+              height: 1000,
+              width: 1000
+            },
+            [theme.breakpoints.down("md")]: {
+              mt: -20,
+              mb: -15,
+              height: 500,
+              width: 500
+            }
+          }}/>
+        </Box> }
+
+        <Box sx={{
+          display: showPlayer ? "box" : "none",
+          position: "relative",
+          width: smallScreen ? "100%" : largeScreen ? "50%" : "75%",
+          borderRadius: 7.5,
+          overflow: "hidden",
+          pt: `calc(1080 / 1920 * ${smallScreen ? "100%" : largeScreen ? "50%" : "75%"})`
+        }}>
+          <ReactPlayer
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0
+            }}
+            url="https://twitch.tv/ChevCast"
+            playing={true}
+            width="100%"
+            height="100%"
+            onStart={() => setShowPlayer(true)}
+            onEnded={() => setShowPlayer(false)}
+            config={{
+              twitch: {
+                options: {
+                  parent: ["chevcast.tv"]
+                }
+              }
+            }}
+          />
+        </Box>
+
+        <Box>
+          <IconButton href={CHEVCAST_DISCORD} size="large">
+            <DiscordIcon color="#80F982" sx={socialMediaIconStyles} />
+          </IconButton>
+          <IconButton href={CHEVCAST_TWITCH} size="large">
+            <TwitchIcon color="#80F982" sx={socialMediaIconStyles} />
+          </IconButton>
+          <IconButton href={CHEVCAST_YOUTUBE} size="large">
+            <YouTubeIcon color="#80F982" sx={socialMediaIconStyles} />
+          </IconButton>
+          <IconButton href={CHEVCAST_FACEBOOK} size="large">
+            <FacebookIcon color="#80F982" sx={socialMediaIconStyles} />
+          </IconButton>
+          <IconButton href={CHEVCAST_TWITTER} size="large">
+            <TwitterIcon color="#80F982" sx={socialMediaIconStyles} />
+          </IconButton>
+        </Box>
       </HeroContent>
     </HeroContainer>
   );

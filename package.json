@@ -39,6 +39,7 @@
     "next-auth": "^4.0.0-beta.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-player": "^2.9.0",
     "styles": "file:styles",
     "tmi.js": "^1.8.5",
     "types": "file:types",

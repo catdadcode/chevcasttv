@@ -35,6 +35,7 @@ export { default as DrawerNav } from "./NavBar/DrawerNav";
 export { default as Error } from "./Error";
 export { default as Footer } from "./Footer";
 export { default as HeroSection } from "./HeroSection";
+
 export { default as Layout } from "./Layout";
 export { default as NavBar } from "./NavBar";
 export { default as UserMenu } from "./NavBar/UserMenu";
@@ -42,4 +43,8 @@ export { default as TabNav } from "./NavBar/TabNav";
 
 // Custom Icons
 export { default as DiscordIcon } from "./icons/Discord";
+export { default as FacebookIcon } from "./icons/Facebook";
 export { default as NeonControllerIcon } from "./icons/NeonController";
+export { default as TwitchIcon } from "./icons/Twitch";
+export { default as TwitterIcon } from "./icons/Twitter";
+export { default as YouTubeIcon } from "./icons/YouTube";

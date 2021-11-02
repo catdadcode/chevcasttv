@@ -3,14 +3,12 @@ import { styled, Theme } from "@mui/material/styles";
 import React, { FC } from "react";
 
 type Props = {
-  width?: number,
-  height?: number,
   backgroundOn?: boolean,
   sx?: SxProps<Theme>
 };
 
 
-const NeonController: FC<Props> = ({ width=25, height=25, backgroundOn=false, sx }) => { 
+const NeonController: FC<Props> = ({ backgroundOn=false, sx }) => { 
   const Svg = styled("svg")(null);
   const styles = `
     .cls-1 {

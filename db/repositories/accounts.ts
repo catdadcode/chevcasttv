@@ -10,11 +10,6 @@ export type Account = {
   refresh_token: string;
   scope: string;
   token_type: "Bearer";
-  restream: {
-    accessToken: string;
-    refreshToken: string;
-    expiresAt: string;
-  };
   userId: ObjectId;
 };
 

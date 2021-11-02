@@ -1,10 +1,8 @@
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
 import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
-import { listen as restreamListen } from "./api-clients/restreamClient";
 import logger from "./logger";
 import config from "config";
-import { alertClasses } from "@mui/material";
 
 const {
   CONTEXT_TIMEOUT
@@ -13,7 +11,6 @@ const {
 type Options = {
   twitchChannels: string[];
   discordChannelIds: string[];
-  restream?: boolean;
 };
 
 export default class Chatbot {
@@ -37,40 +34,22 @@ export default class Chatbot {
   private twitchChannels: string[];
   private voiceContextTimeout?: NodeJS.Timeout;
   private queueInProgress = false;
-  private restream = false;
 
   constructor(options: Options) {
     const { twitchChannels, discordChannelIds } = options;
     this.discordChannelIds = discordChannelIds;
     this.twitchChannels = twitchChannels;
-    this.restream = options.restream ?? false;
     this.log = logger.extend("CHATBOT");
   }
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    if (this.restream) {
-      await Promise.all([
-        twitchListen(this.twitchChannels, this.queueMessage.bind(this)),
-        restreamListen(this.queueMessage.bind(this))
-      ]);
-    } else {
-      await twitchListen(this.twitchChannels, this.queueMessage.bind(this));
-    }
+    await twitchListen(this.twitchChannels, this.queueMessage.bind(this));
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
-      let msg = "Chevbot is now listening";
-      if (channels.length > 1 && !this.restream) {
-        const lastChannel = channels.pop();
-        msg += ` to Twitch chat for channels: ${channels.join(", ")}, and ${lastChannel}`;
-      }
-      if (channels.length > 0) {
-        msg += ` to Twitch chat for ${channels.join(", ")}`;
-      }
-      if (this.restream) {
-        msg += ", and Restream chat for ChevCast";
-      }
-      return msg + ".";
+      if (channels.length === 1) return `Chevbot is now listening to Twitch chat for ${channels.pop()}!`;
+      const lastChannel = channels.pop();
+      return `Chevbot is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;
     }
     this.log(readyMsg(this.twitchChannels));
     const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername)));
