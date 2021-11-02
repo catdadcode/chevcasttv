@@ -55,7 +55,7 @@ const HeroSection = () => {
       <HeroContent sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-around",
+        justifyContent: "flex-start",
         justifyItems: "center",
         flexDirection: "column",
         overflow: "hidden"
