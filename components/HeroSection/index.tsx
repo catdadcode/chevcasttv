@@ -138,20 +138,20 @@ const HeroSection = () => {
         </Box>
 
         <Box>
-          <IconButton href={CHEVCAST_DISCORD} size="large">
-            <DiscordIcon color="#80F982" sx={socialMediaIconStyles} />
-          </IconButton>
           <IconButton href={CHEVCAST_TWITCH} size="large">
             <TwitchIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
           <IconButton href={CHEVCAST_YOUTUBE} size="large">
             <YouTubeIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
-          <IconButton href={CHEVCAST_FACEBOOK} size="large">
-            <FacebookIcon color="#80F982" sx={socialMediaIconStyles} />
+          <IconButton href={CHEVCAST_DISCORD} size="large">
+            <DiscordIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
           <IconButton href={CHEVCAST_TWITTER} size="large">
             <TwitterIcon color="#80F982" sx={socialMediaIconStyles} />
+          </IconButton>
+          <IconButton href={CHEVCAST_FACEBOOK} size="large">
+            <FacebookIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
         </Box>
       </HeroContent>
