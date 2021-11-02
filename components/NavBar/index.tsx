@@ -97,7 +97,7 @@ const NavBar = () => {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<DiscordIcon color="#333" />}
+                startIcon={<DiscordIcon sx={{ width: 25, height: 25 }} color="#333" />}
                 onClick={() => signIn("discord")}
               >Sign In</Button>
             }
