@@ -3,32 +3,27 @@ import { Box } from "components";
 import { styled, Theme } from "@mui/material/styles";
 import { SxProps } from "@mui/system";
 
-export const HeroContainer: FC = ({children}) => <Box
-  sx={{
-    background: "#0c0c0c",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    padding: "0 30px",
-    minHeight: {
-      xl: "1000px",
-      lg: "1000px",
-      md: "1000px",
-      sm: "750px",
-      xs: "500px"
-    },
-    position: "relative",
-    zIndex: 1,
-    overflow: "hidden"
-  }}
->{children}</Box>;
-
-type HeroContentProps = {
+type Props = {
   children: React.ReactNode;
   sx?: SxProps<Theme>;
-};
+}
 
-export const HeroContent: FC<HeroContentProps> = ({children, sx}) => <Box
+export const HeroContainer: FC<Props> = ({children, sx}) => {
+  return (<Box
+    sx={Object.assign({
+      background: "#0c0c0c",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "0 30px",
+      position: "relative",
+      zIndex: 1,
+      overflow: "hidden"
+    }, sx)}
+  >{children}</Box>);
+}
+
+export const HeroContent: FC<Props> = ({children, sx}) => <Box
   sx={Object.assign({
     position: "absolute",
     width: "100%",

@@ -33,11 +33,11 @@ const HeroSection = () => {
   const largeScreen = useMediaQuery(theme.breakpoints.up("xl"));
   const [showPlayer, setShowPlayer] = useState(false);
   const socialMediaIconStyles = {
-    [theme.breakpoints.up("md")]: {
+    [theme.breakpoints.up("lg")]: {
       height: 150,
       width: 150
     },
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down("lg")]: {
       height: 75,
       width: 75
     },
@@ -47,7 +47,15 @@ const HeroSection = () => {
     }
   };
   return (
-    <HeroContainer>
+    <HeroContainer sx={{
+      minHeight: {
+        xl: "800px",
+        lg: "800px",
+        md: "600px",
+        sm: "600px",
+        xs: "500px"
+      },
+    }}>
       <HeroBg>
         <VideoBg autoPlay loop muted src={"/video/home-bg2.mp4"} />
       </HeroBg>
@@ -55,7 +63,7 @@ const HeroSection = () => {
       <HeroContent sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "space-evenly",
         justifyItems: "center",
         flexDirection: "column",
         overflow: "hidden"
@@ -84,14 +92,14 @@ const HeroSection = () => {
             textShadow: theme => `3px 3px 7px ${theme.palette.success.light}`
           }}>ChevCast.TV</Typography>
           <NeonControllerIcon backgroundOn sx={{
-            [theme.breakpoints.up("md")]: {
-              mt: -35,
+            [theme.breakpoints.up("lg")]: {
+              mt: -30,
               mb: -25,
-              height: 1000,
-              width: 1000
+              height: 800,
+              width: 800
             },
-            [theme.breakpoints.down("md")]: {
-              mt: -20,
+            [theme.breakpoints.down("lg")]: {
+              mt: -15,
               mb: -15,
               height: 500,
               width: 500
