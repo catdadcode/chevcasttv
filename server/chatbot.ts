@@ -45,7 +45,23 @@ export default class Chatbot {
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    await twitchListen(this.twitchChannels, this.queueMessage.bind(this));
+    await twitchListen(this.twitchChannels, (username, message, channel, emotes) => {
+      if (emotes) {
+        const emoteStrings = Object.keys(emotes).map(emoteId => {
+          const [emoteRange] = emotes[emoteId];
+          const [start, end] = emoteRange.split("-");
+          const emoteString = message
+            .slice(parseInt(start), parseInt(end) + 1)
+            .replace(/\)/g, "\\)")
+            .replace(/\(/g, "\\(");
+          return emoteString;
+        });
+        const regex = new RegExp(`(${emoteStrings.join("|")})`, "g");
+        message = message.replace(regex, "");
+      }
+      if (message.match(/^\s*$/)) return;
+      this.queueMessage(username, message);
+    });
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
       const version = packageJson.version.split(".").slice(0, 2).join(" point ");

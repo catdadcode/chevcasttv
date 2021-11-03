@@ -15,7 +15,7 @@ export const initialize = async () => {
   log("Twitch client ready.");
 };
 
-type MessageHandler = (username: string, message: string, channel: string) => void;
+type MessageHandler = (username: string, message: string, channel: string, emotes?: Record<string, string[]> ) => void;
 type Subscription = [channels: string[], handler: MessageHandler];
 const subscriptions: Subscription[] = [];
 export const listenToChannels = async (channels: string[], handler: MessageHandler) => {
@@ -65,6 +65,7 @@ export const listenToChannels = async (channels: string[], handler: MessageHandl
 };
 
 twitchClient.on("message", (channel, tags, message) => {
+  console.log(tags);
   if (message === "!disc") {
     twitchClient.disconnect();
     return;
@@ -78,5 +79,5 @@ twitchClient.on("message", (channel, tags, message) => {
   if (!handlers || handlers.length === 0) return;
 
   // Invoke each handler that is subscribed to messages in this channel.
-  handlers.forEach(handler => handler(tags["display-name"]! as string, message, channel));
+  handlers.forEach(handler => handler(tags["display-name"]! as string, message, channel, tags.emotes));
 });
