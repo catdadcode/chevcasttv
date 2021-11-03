@@ -48,13 +48,7 @@ const HeroSection = () => {
   };
   return (
     <HeroContainer sx={{
-      minHeight: {
-        xl: "800px",
-        lg: "800px",
-        md: "600px",
-        sm: "600px",
-        xs: "500px"
-      },
+      height: "calc(100vh - 225px)"
     }}>
       <HeroBg>
         <VideoBg autoPlay loop muted playsInline src={"/video/home-bg2.mp4"} />
@@ -108,12 +102,13 @@ const HeroSection = () => {
         </Box> }
 
         <Box sx={{
-          display: showPlayer ? "box" : "none",
+          display: showPlayer ? "block" : "none",
           position: "relative",
-          width: smallScreen ? "100%" : largeScreen ? "50%" : "75%",
-          borderRadius: 7.5,
+          width: smallScreen ? "100%" : largeScreen ? "45%" : "75%",
+          borderRadius: 5,
+          border: "solid 2px #A1F48B",
           overflow: "hidden",
-          pt: `calc(1080 / 1920 * ${smallScreen ? "100%" : largeScreen ? "50%" : "75%"})`
+          pt: `calc(1080 / 1920 * ${smallScreen ? "100%" : largeScreen ? "45%" : "75%"})`
         }}>
           <ReactPlayer
             style={{
