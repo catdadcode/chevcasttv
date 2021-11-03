@@ -3,7 +3,11 @@ import logger from "../logger";
 
 const log = logger.extend("TWITCH_CLIENT");
 
-const twitchClient = new Client({});
+const twitchClient = new Client({
+  connection: {
+    reconnect: true
+  }
+});
 
 export const initialize = async () => {
   log("Initializing Twitch client...");
@@ -61,6 +65,10 @@ export const listenToChannels = async (channels: string[], handler: MessageHandl
 };
 
 twitchClient.on("message", (channel, tags, message) => {
+  if (message === "!disc") {
+    twitchClient.disconnect();
+    return;
+  }
   log(`${channel}:${tags["display-name"]}:${message}`);
   channel = channel.slice(1);
   // Find all message handlers that are subscribed to this message's channel.

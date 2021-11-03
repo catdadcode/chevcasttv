@@ -3,6 +3,7 @@ import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
 import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
 import logger from "./logger";
 import config from "config";
+import packageJson from "../package.json";
 
 const {
   CONTEXT_TIMEOUT
@@ -47,9 +48,10 @@ export default class Chatbot {
     await twitchListen(this.twitchChannels, this.queueMessage.bind(this));
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
-      if (channels.length === 1) return `Chevbot is now listening to Twitch chat for ${channels.pop()}!`;
+      const version = packageJson.version.split(".").slice(0, 2).join(" point ");
+      if (channels.length === 1) return `Chevbot version ${version} is now listening to Twitch chat for ${channels.pop()}!`;
       const lastChannel = channels.pop();
-      return `Chevbot is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;
+      return `Chevbot version ${version} is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;
     }
     this.log(readyMsg(this.twitchChannels));
     const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername)));
