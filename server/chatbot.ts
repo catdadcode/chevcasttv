@@ -64,7 +64,7 @@ export default class Chatbot {
     });
     const readyMsg = (twitchChannels: string[]) => {
       const channels = [...twitchChannels];
-      const version = packageJson.version.split(".").slice(0, 2).join(" point ");
+      const version = packageJson.version.split(".").join(" point ");
       if (channels.length === 1) return `Chevbot version ${version} is now listening to Twitch chat for ${channels.pop()}!`;
       const lastChannel = channels.pop();
       return `Chevbot version ${version} is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;

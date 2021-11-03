@@ -1,6 +1,6 @@
 {
   "name": "chevcasttv",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "clean": "rimraf ./server/*.js ./server/**/*.js ./config/*.js ./config/**/*.js ./db/*.js ./db/**/*.js",
