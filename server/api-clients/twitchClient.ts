@@ -65,10 +65,6 @@ export const listenToChannels = async (channels: string[], handler: MessageHandl
 };
 
 twitchClient.on("message", (channel, tags, message) => {
-  if (message === "!disc") {
-    twitchClient.disconnect();
-    return;
-  }
   log(`${channel}:${tags["display-name"]}:${message}`);
   channel = channel.slice(1);
   // Find all message handlers that are subscribed to this message's channel.
