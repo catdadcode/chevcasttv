@@ -65,7 +65,6 @@ export const listenToChannels = async (channels: string[], handler: MessageHandl
 };
 
 twitchClient.on("message", (channel, tags, message) => {
-  console.log(tags);
   if (message === "!disc") {
     twitchClient.disconnect();
     return;
