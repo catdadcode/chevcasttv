@@ -56,7 +56,7 @@ export default class Chatbot {
             .replace(/\(/g, "\\(");
           return emoteString;
         });
-        const regex = new RegExp(`(${emoteStrings.join("|")})`, "g");
+        const regex = new RegExp(`(${emoteStrings.join("|")}|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])`, "g");
         message = message.replace(regex, "");
       }
       if (message.match(/^\s*$/)) return;
