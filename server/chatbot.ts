@@ -1,3 +1,4 @@
+import emojiRegex from "emoji-regex";
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
 import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
@@ -56,8 +57,9 @@ export default class Chatbot {
             .replace(/\(/g, "\\(");
           return emoteString;
         });
-        const regex = new RegExp(`(${emoteStrings.join("|")}|\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])`, "g");
-        message = message.replace(regex, "");
+        const twitchEmoteRegex = new RegExp(`(${emoteStrings.join("|")})`, "g");
+        message = message.replace(twitchEmoteRegex, "").replace(emojiRegex(), "");
+
       }
       if (message.match(/^\s*$/)) return;
       this.queueMessage(username, message);

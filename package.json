@@ -1,6 +1,6 @@
 {
   "name": "chevcasttv",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "clean": "rimraf ./server/*.js ./server/**/*.js ./config/*.js ./config/**/*.js ./db/*.js ./db/**/*.js",
@@ -30,6 +30,7 @@
     "discord.js": "^13.1.0",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
+    "emoji-regex": "^10.0.0",
     "ffmpeg-static": "^4.4.0",
     "hooks": "file:hooks",
     "libsodium-wrappers": "^0.7.9",
