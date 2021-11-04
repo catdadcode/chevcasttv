@@ -47,7 +47,7 @@ const {
     const parsedUrl = parse(req.url ?? "", true);
     handle(req, res, parsedUrl);
   });
-  await server.listen(3000);
+  await server.listen(NODE_ENV === "development" ? 3000 : 80);
   console.log(`> ChevCastTV is running at ${APP_URL} in ${NODE_ENV} mode.`);
 
   log("Initializing API clients...");
