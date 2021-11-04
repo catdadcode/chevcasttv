@@ -58,9 +58,9 @@ export default class Chatbot {
           return emoteString;
         });
         const twitchEmoteRegex = new RegExp(`(${emoteStrings.join("|")})`, "g");
-        message = message.replace(twitchEmoteRegex, "").replace(emojiRegex(), "");
-
+        message = message.replace(twitchEmoteRegex, "");
       }
+      message = message.replace(emojiRegex(), "");
       if (message.match(/^\s*$/)) return;
       this.queueMessage(username, message);
     });
