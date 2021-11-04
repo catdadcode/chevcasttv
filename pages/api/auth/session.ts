@@ -5,8 +5,7 @@ import moment from "moment";
 import config from "config";
 
 const {
-  JWT_SECRET,
-  NODE_ENV
+  JWT_SECRET
 } = config;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -21,7 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const payload = jwt.verify(sessionToken, JWT_SECRET);
   cookies.set("session_token", sessionToken, {
     httpOnly: true,
-    secure: NODE_ENV !== "development",
     sameSite: true,
     overwrite: true,
     expires: moment().add(30, "days").toDate()

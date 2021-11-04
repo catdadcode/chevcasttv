@@ -14,8 +14,7 @@ const {
   DISCORD_CDN_URL,
   DISCORD_CLIENT_ID,
   DISCORD_CLIENT_SECRET,
-  JWT_SECRET,
-  NODE_ENV
+  JWT_SECRET
 } = config;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -100,7 +99,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const cookies = new Cookies(req, res);
   cookies.set("session_token", sessionToken, {
     httpOnly: true,
-    secure: NODE_ENV !== "development",
     sameSite: true,
     overwrite: true,
     expires: moment().add(30, "days").toDate()
