@@ -1,10 +1,9 @@
 import type { NextPage } from 'next'
-import { useSession } from "next-auth/react";
 import { Error } from "components";
+import { useAppState } from "hooks/useAppState";
 
 const Settings: NextPage = () => {
-  const { data } = useSession();
-  const user = data?.user;
+  const { state: { user } } = useAppState();
 
   if (!user) return <Error type="NotAuthorized" />;
 

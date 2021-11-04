@@ -3,6 +3,11 @@ import createStateContainer from "@chevtek/react-state-container";
 type State = {
   navDrawerOpen: boolean;
   userMenuOpen: boolean;
+  user?: {
+    avatar: string;
+    email: string;
+    username: string;
+  };
 }
 
 export const [
@@ -11,9 +16,17 @@ export const [
 ] = createStateContainer("AppState")
   .setState({
     navDrawerOpen: false,
-    userMenuOpen: false,
+    userMenuOpen: false
   } as State)
   .setActions({
+
+    SET_USER: (state, user: State["user"]) => {
+      state.user = user;
+    },
+
+    DELETE_USER: state => {
+      state.user = undefined;
+    },
 
     OPEN_NAV_DRAWER: state => {
       state.navDrawerOpen = true;

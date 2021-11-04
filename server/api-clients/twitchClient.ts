@@ -6,6 +6,11 @@ const log = logger.extend("TWITCH_CLIENT");
 const twitchClient = new Client({
   connection: {
     reconnect: true
+  },
+  logger: {
+    info: log,
+    warn: log,
+    error: log
   }
 });
 

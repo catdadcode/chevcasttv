@@ -1,7 +1,7 @@
-import { MongoClient } from "mongodb";
-
+import { Mongoose, Model } from "mongoose";
 declare global {
-  var _mongoClient: MongoClient;
+  var mongoose: Mongoose;
+  var userModel: Model;
 }
 
 declare module '@mui/material/styles' {

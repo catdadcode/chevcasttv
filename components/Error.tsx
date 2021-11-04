@@ -1,11 +1,11 @@
 import React, { ReactNode, FC } from "react";
+import { useRouter } from "next/router";
 import {
   Box,
   Button,
   DiscordIcon,
   Typography 
 } from "components";
-import { signIn } from "next-auth/react";
 import { useTheme } from "@mui/material/styles";
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 }
 
 const Error: FC<Props> = (props) => {
-  const theme = useTheme();
+  const router = useRouter();
   const { type } = props;
 
   let title, description, content;
@@ -34,8 +34,8 @@ const Error: FC<Props> = (props) => {
         <Button
           variant="contained"
           size="large"
-          startIcon={<DiscordIcon />}
-          onClick={() => signIn("discord")}
+          startIcon={<DiscordIcon color="#333" sx={{ width: 35, height: 35 }} />}
+          onClick={() => window.location.assign("/api/auth/login")}
         >Sign In</Button>
       );
       break;

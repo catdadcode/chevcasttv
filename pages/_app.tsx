@@ -1,17 +1,15 @@
 import "styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { SessionProvider } from "next-auth/react";
 import { Layout } from "components";
 import ThemeProvider from "styles/theme";
 import { AppStateProvider } from "hooks/useAppState";
 
 const App = ({
   Component,
-  pageProps: { session, ...pageProps }
+  pageProps
 }: AppProps) => {
   return(
-    <SessionProvider session={session}>
       <AppStateProvider>
         <ThemeProvider>
           <Head>
@@ -24,7 +22,6 @@ const App = ({
           </Layout>
         </ThemeProvider>
       </AppStateProvider>
-    </SessionProvider>
   );
 };
 export default App

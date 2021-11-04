@@ -46,6 +46,13 @@ const HeroSection = () => {
       width: 50
     }
   };
+  const animation = "10s infinite wobbleAndScale";
+  const iconHover = {
+    "&:hover": {
+      animation: "1.5s infinite alternate scale ease-in-out"
+    }
+  };
+
   return (
     <HeroContainer sx={{
       height: "calc(100vh - 225px)"
@@ -63,7 +70,7 @@ const HeroSection = () => {
         overflow: "hidden"
       }}>
         { !showPlayer && <Box sx={{
-          animation: "5s infinite alternate wobble ease-in-out",
+          animation,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -133,19 +140,19 @@ const HeroSection = () => {
         </Box>
 
         <Box>
-          <IconButton href={CHEVCAST_TWITCH} size="large">
+          <IconButton sx={iconHover} href={CHEVCAST_TWITCH} size="large">
             <TwitchIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
-          <IconButton href={CHEVCAST_YOUTUBE} size="large">
+          <IconButton sx={iconHover} href={CHEVCAST_YOUTUBE} size="large">
             <YouTubeIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
-          <IconButton href={CHEVCAST_DISCORD} size="large">
+          <IconButton sx={iconHover} href={CHEVCAST_DISCORD} size="large">
             <DiscordIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
-          <IconButton href={CHEVCAST_TWITTER} size="large">
+          <IconButton sx={iconHover} href={CHEVCAST_TWITTER} size="large">
             <TwitterIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
-          <IconButton href={CHEVCAST_FACEBOOK} size="large">
+          <IconButton sx={iconHover} href={CHEVCAST_FACEBOOK} size="large">
             <FacebookIcon color="#80F982" sx={socialMediaIconStyles} />
           </IconButton>
         </Box>

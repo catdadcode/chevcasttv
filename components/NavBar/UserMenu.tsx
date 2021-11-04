@@ -1,6 +1,6 @@
 import React, { FC, RefObject } from "react";
 import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
+import axios from "axios";
 import {
   ListItemIcon,
   LogoutIcon,
@@ -17,6 +17,13 @@ type Props = {
 const UserMenu: FC<Props> = ({ $menuAnchor }) => {
   const router = useRouter();
   const { state: { userMenuOpen }, dispatch } = useAppState();
+
+  const logout = () => {
+    (async () => {
+      await axios.post("/api/auth/logout");
+      dispatch("DELETE_USER");
+    })().catch(console.log);
+  }
 
   return (
     <Menu
@@ -39,7 +46,7 @@ const UserMenu: FC<Props> = ({ $menuAnchor }) => {
         </ListItemIcon>
         Settings
       </MenuItem>
-      <MenuItem onClick={() => signOut()}>
+      <MenuItem onClick={logout}>
         <ListItemIcon>
           <LogoutIcon fontSize="small" />
         </ListItemIcon>

@@ -1,19 +1,16 @@
-import client from "./client";
+import mongoose from "mongoose";
 import config from "config";
-import initAccounts, { AccountRepository } from "./repositories/accounts";
 
-const { DATABASE_NAME } = config;
-
-type Repositories = {
-  accounts: AccountRepository;
-};
-
-const repositories: Partial<Repositories> = {};
+const {
+  DATABASE_NAME,
+  MONGODB_CONNECTION_STRING
+} = config;
 
 export const initialize = async () => {
-  await client.connect();
-  const db = client.db(DATABASE_NAME);
-  repositories.accounts = initAccounts(db);
+  const { connection } = global.mongoose =  global.mongoose ?? await mongoose.connect(MONGODB_CONNECTION_STRING, {
+    dbName: DATABASE_NAME
+  });
+  connection.on("error", console.log);
 };
 
-export default repositories as Repositories;
+export { default as User } from "./models/User";

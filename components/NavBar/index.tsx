@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { useRouter } from "next/router";
-import { useSession, signIn } from "next-auth/react";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useAppState } from "hooks/useAppState";
@@ -21,14 +20,11 @@ import {
 } from "components";
 
 const NavBar = () => {
-  const { dispatch } = useAppState();
-  const { data } = useSession();
+  const { state: { user }, dispatch } = useAppState();
   const theme = useTheme();
   const router = useRouter();
   const smDownBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
   const $userMenuAnchor = useRef<HTMLButtonElement>(null);
-
-  const user = data?.user;
 
   return (
     <>
@@ -86,9 +82,9 @@ const NavBar = () => {
                       width: "2.5rem",
                     }}
                     variant="circular"
-                    src={user.image!}
+                    src={user.avatar!}
                   />
-                  <Typography variant="h6">{ user.name }</Typography>
+                  <Typography variant="h6">{ user.username }</Typography>
                 </Button>
                 <UserMenu $menuAnchor={$userMenuAnchor} />
               </>
@@ -98,7 +94,7 @@ const NavBar = () => {
                 variant="contained"
                 size="large"
                 startIcon={<DiscordIcon sx={{ width: 25, height: 25 }} color="#333" />}
-                onClick={() => signIn("discord")}
+                onClick={() => window.location.assign("/api/auth/login")}
               >Sign In</Button>
             }
           </Box>
