@@ -20,7 +20,7 @@ const {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Exchange code for access token.
-  const { code } = req.query;
+  const { code, state } = req.query as Record<string, string>;
   const redirectUri = `${APP_URL}/api/auth/discord-callback`;
   type TokenData = {
     access_token: string;
@@ -103,7 +103,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     overwrite: true,
     expires: moment().add(30, "days").toDate()
   });
-  res.redirect(APP_URL);
+  res.redirect(decodeURIComponent(state));
 };
 
 export default handler;

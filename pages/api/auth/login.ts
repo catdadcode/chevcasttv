@@ -1,3 +1,4 @@
+import { URLSearchParams } from "url";
 import { NextApiRequest, NextApiResponse } from "next";
 import config from "config";
 
@@ -8,8 +9,15 @@ const {
 } = config;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const redirectUri = encodeURIComponent(`${APP_URL}/api/auth/discord-callback`);
-  res.redirect(`${DISCORD_API_URL}/oauth2/authorize?response_type=code&client_id=${DISCORD_CLIENT_ID}&scope=identify%20email%20guilds.join%20guilds&redirect_uri=${redirectUri}&prompt=none`);
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: DISCORD_CLIENT_ID,
+    scope: "identify email guilds guilds.join",
+    redirect_uri: `${APP_URL}/api/auth/discord-callback`,
+    prompt: "none",
+    state: req.headers.referrer ?? APP_URL 
+  });
+  res.redirect(`${DISCORD_API_URL}/oauth2/authorize?${params.toString()}`);
 };
 
 export default handler;
