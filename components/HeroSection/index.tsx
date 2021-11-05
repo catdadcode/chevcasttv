@@ -46,7 +46,6 @@ const HeroSection = () => {
       width: 50
     }
   };
-  const animation = "10s infinite wobbleAndScale";
   const iconHover = {
     "&:hover": {
       animation: "1.5s infinite alternate scale ease-in-out"
@@ -70,7 +69,12 @@ const HeroSection = () => {
         overflow: "hidden"
       }}>
         { !showPlayer && <Box sx={{
-          animation,
+          animation: "1s winkOn, 5s infinite alternate wobble ease-in-out",
+          // transformOrigin: "top center",
+          // border: "solid 3px #80F982",
+          // backgroundColor: "rgba(161, 244, 139, 0.1)",
+          // borderRadius: "50rem",
+          // padding: 3,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -83,16 +87,19 @@ const HeroSection = () => {
           }
         }}>
           <Typography variant="h4" sx={{
+            // animation: "2s infinite flicker",
             color: theme => theme.palette.success.light,
             fontFamily: "neon",
             textShadow: theme => `3px 3px 5px ${theme.palette.success.light}`
           }}>Welcome To</Typography>
           <Typography variant={smallScreen ? "h2" : "h1"} sx={{
+            animation: "20s infinite flicker",
             color: "#CCFCD6",
             fontFamily: "neon",
             textShadow: theme => `3px 3px 7px ${theme.palette.success.light}`
-          }}>ChevCast.TV</Typography>
+          }}>ChevCast<span style={{animation: "5s infinite flicker"}}>.TV</span></Typography>
           <NeonControllerIcon backgroundOn sx={{
+            // animation: "2s winkOn, 7.5s infinite flicker",
             [theme.breakpoints.up("lg")]: {
               mt: -30,
               mb: -25,
