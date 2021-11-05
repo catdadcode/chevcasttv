@@ -97,7 +97,7 @@ const HeroSection = () => {
             color: "#CCFCD6",
             fontFamily: "neon",
             textShadow: theme => `3px 3px 7px ${theme.palette.success.light}`
-          }}>ChevCast<span style={{animation: "5s infinite flicker"}}>.TV</span></Typography>
+          }}>ChevCast<span style={{animation: "5.9s infinite flicker"}}>.TV</span></Typography>
           <NeonControllerIcon backgroundOn sx={{
             // animation: "2s winkOn, 7.5s infinite flicker",
             [theme.breakpoints.up("lg")]: {
