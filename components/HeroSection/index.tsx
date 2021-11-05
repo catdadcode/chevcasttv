@@ -70,7 +70,7 @@ const HeroSection = () => {
       }}>
         { !showPlayer && <Box sx={{
           animation: "1s winkOn, 5s infinite alternate wobble ease-in-out",
-          // transformOrigin: "top center",
+          transformOrigin: "top center",
           // border: "solid 3px #80F982",
           // backgroundColor: "rgba(161, 244, 139, 0.1)",
           // borderRadius: "50rem",
