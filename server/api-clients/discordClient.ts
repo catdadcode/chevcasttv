@@ -46,7 +46,7 @@ const joinVoice = async (channelId: Snowflake) => {
 export const playAudio = async (channelId: Snowflake, audioContent: Buffer) => {
   log(`Playing audio to voice channel ${channelId}...`);
   let connection = voiceConnections[channelId];
-  if (!connection) {
+  if (!connection || connection.state.status === VoiceConnectionStatus.Disconnected) {
     await joinVoice(channelId);
     connection = voiceConnections[channelId];
   }
