@@ -11,11 +11,10 @@ import { User } from "db";
 
 const {
   APP_URL,
-  DISCORD_API_URL,
-  DISCORD_CDN_URL,
-  DISCORD_CLIENT_ID,
-  DISCORD_CLIENT_SECRET,
-  DISCORD_OAUTH_URL,
+  TWITCH_API_URL,
+  TWITCH_CLIENT_ID,
+  TWITCH_CLIENT_SECRET,
+  TWITCH_OAUTH_URL,
   JWT_SECRET
 } = config;
 
@@ -25,7 +24,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Exchange code for access token.
   const { code, state } = req.query as Record<string, string>;
-  const redirectUri = `${APP_URL}/api/auth/discord-callback`;
+  const redirectUri = `${APP_URL}/api/auth/twitch-callback`;
   type TokenData = {
     access_token: string;
     refresh_token: string;
@@ -36,10 +35,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     refresh_token,
     expires_in
   }} = await axios.post<TokenData>(
-    `${DISCORD_OAUTH_URL}/token`,
+    `${TWITCH_OAUTH_URL}/token`,
     new URLSearchParams({
-      client_id: DISCORD_CLIENT_ID,
-      client_secret: DISCORD_CLIENT_SECRET,
+      client_id: TWITCH_CLIENT_ID,
+      client_secret: TWITCH_CLIENT_SECRET,
       code,
       grant_type: "authorization_code",
       redirect_uri: redirectUri
@@ -53,21 +52,31 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   // Use access token to retrieve user data.
   type UserData = {
-    avatar: string,
-    email: string,
-    id: string,
-    username: string
+    data: [{
+      display_name: string,
+      email: string,
+      id: string,
+      profile_image_url: string
+    }]
   };
-  const { data: {
-    avatar,
-    email,
-    id,
-    username
-  }} = await axios.get<UserData>(`${DISCORD_API_URL}/users/@me`, {
-    headers: {
-      Authorization: `Bearer ${access_token}`
+  const {
+    data: {
+      data: [{
+        display_name,
+        email,
+        id,
+        profile_image_url
+      }]
     }
-  });
+  } = await axios.get<UserData>(
+    `${TWITCH_API_URL}/users`,
+    {
+      headers: {
+        "Authorization": `Bearer ${access_token}`,
+        "Client-Id": TWITCH_CLIENT_ID
+      }
+    }
+  );
 
   // Use email to look for existing user.
   let user;
@@ -78,30 +87,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch {}
   }
   if (!user) {
-    user = await User.findOne({ "discord.email": email });
+    user = await User.findOne({ "twitch.email": email });
   }
-  const avatarUrl = `${DISCORD_CDN_URL}/avatars/${id}/${avatar}.png`;
   if (!user) {
     user = new User({
-      primaryProvider: "discord",
-      discord: {
+      primaryProvider: "twitch",
+      twitch: {
         accessToken: access_token,
         accessTokenExpiration: new Date(expires_in),
-        avatar: avatarUrl,
+        avatar: profile_image_url,
         id,
         email,
         refreshToken: refresh_token,
-        username
+        username: display_name
       }
     });
   } else {
     Object.assign(user, {
-      discord: {
+      twitch: {
         accessToken: access_token,
         accessTokenExpiration: new Date(expires_in),
-        avatar: avatarUrl,
+        avatar: profile_image_url,
         refreshToken: refresh_token,
-        username
+        username: display_name
       }
     });
   }
@@ -110,10 +118,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // Create JSON Web Token and store in cookie.
   if (!sessionToken) {
     const payload = JSON.stringify({
-      avatar: avatarUrl,
+      avatar: profile_image_url,
       email,
       userId: user.id,
-      username
+      username: display_name
     } as JwtPayload);
     sessionToken = jwt.sign(payload, JWT_SECRET);
     cookies.set("session_token", sessionToken, {

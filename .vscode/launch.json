@@ -11,6 +11,7 @@
       "type": "pwa-node",
       "request": "launch",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nodemon",
+      "args": ["-w", "${workspaceFolder}/server"],
       "outputCapture": "std",
       "env": {
         "TS_NODE_PROJECT": "tsconfig.server.json",

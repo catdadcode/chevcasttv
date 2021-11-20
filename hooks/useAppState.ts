@@ -8,6 +8,9 @@ type State = {
     email: string;
     username: string;
   };
+  dialogs: {
+    login: boolean;
+  }
 }
 
 export const [
@@ -16,7 +19,10 @@ export const [
 ] = createStateContainer("AppState")
   .setState({
     navDrawerOpen: false,
-    userMenuOpen: false
+    userMenuOpen: false,
+    dialogs: {
+      login: false
+    }
   } as State)
   .setActions({
 
@@ -28,8 +34,16 @@ export const [
       state.user = undefined;
     },
 
+    OPEN_LOGIN: state => {
+      state.dialogs.login = true;
+    },
+
     OPEN_NAV_DRAWER: state => {
       state.navDrawerOpen = true;
+    },
+
+    CLOSE_LOGIN: state => {
+      state.dialogs.login = false;
     },
 
     CLOSE_NAV_DRAWER: state => {

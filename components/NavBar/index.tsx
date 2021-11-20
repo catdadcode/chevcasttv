@@ -8,9 +8,9 @@ import {
   Avatar,
   Box,
   Button,
-  DiscordIcon,
   DrawerNav,
   IconButton,
+  LoginIcon,
   MenuIcon,
   NeonControllerIcon,
   TabNav,
@@ -23,7 +23,7 @@ const NavBar = () => {
   const { state: { user }, dispatch } = useAppState();
   const theme = useTheme();
   const router = useRouter();
-  const smDownBreakpoint = useMediaQuery(theme.breakpoints.down("sm"));
+  const smDownBreakpoint = useMediaQuery(theme.breakpoints.down("md"));
   const $userMenuAnchor = useRef<HTMLButtonElement>(null);
 
   return (
@@ -70,7 +70,8 @@ const NavBar = () => {
                   variant="outlined"
                   color="primary"
                   sx={{
-                    border: "none"
+                    border: "none",
+                    textTransform: "none"
                   }}
                   ref={$userMenuAnchor}
                   onClick={() => dispatch("TOGGLE_USER_MENU")}
@@ -93,8 +94,8 @@ const NavBar = () => {
               <Button
                 variant="contained"
                 size="large"
-                // startIcon={<DiscordIcon sx={{ width: 25, height: 25 }} color="#333" />}
-                onClick={() => window.location.assign("/api/auth/login")}
+                startIcon={<LoginIcon />}
+                onClick={() => dispatch("OPEN_LOGIN")}
               >Sign In</Button>
             }
           </Box>

@@ -20,13 +20,15 @@ type Props = {
 
 const PassTheStream: NextPage<Props> = ({ timeSlots }) => {
   const timeSlotList = timeSlots.map((timeSlot, index) => {
-    const startTime = <>
-      <Box sx={{color: "success.dark"}}>{moment(timeSlot.startTime).format("MM/D")}</Box>
-      <Box sx={{fontWeight: "bold", color: "success.light" }}>{moment(timeSlot.startTime).format("h a")}</Box>
+    const startTime = moment(new Date(timeSlot.startTime));
+    const endTime = moment(new Date(timeSlot.endTime));
+    const startTimeText = <>
+      <Box sx={{color: "success.dark"}}>{startTime.format("MM/D")}</Box>
+      <Box sx={{fontWeight: "bold", color: "success.light" }}>{startTime.format("h a")}</Box>
     </>;
-    const endTime = <>
-      <Box sx={{color: "success.dark"}}>{moment(timeSlot.endTime).format("MM/D")}</Box>
-      <Box sx={{fontWeight: "bold", color: "success.light" }}>{moment(timeSlot.endTime).format("h a")}</Box>
+    const endTimeText = <>
+      <Box sx={{color: "success.dark"}}>{endTime.format("MM/D")}</Box>
+      <Box sx={{fontWeight: "bold", color: "success.light" }}>{endTime.format("h a")}</Box>
     </>;
     return (
       <Accordion key={timeSlot.id} square={true}>
@@ -40,7 +42,7 @@ const PassTheStream: NextPage<Props> = ({ timeSlots }) => {
 
             <Box sx={{
               textAlign: "center",
-            }}>{startTime}</Box>
+            }}>{startTimeText}</Box>
 
             <Box sx={{
               textAlign: "center",
@@ -50,7 +52,7 @@ const PassTheStream: NextPage<Props> = ({ timeSlots }) => {
 
             <Box sx={{
               textAlign: "center",
-            }}>{endTime}</Box>
+            }}>{endTimeText}</Box>
 
           </Box>
         </AccordionSummary>

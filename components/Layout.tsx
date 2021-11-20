@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect } from "react";
-import { Box, Footer, Grid, NavBar } from "components";
+import { Box, Dialogs, Footer, Grid, NavBar } from "components";
 import { useAppState } from "hooks/useAppState";
 import axios from "axios";
 
@@ -32,6 +32,7 @@ const Layout: FC<Props> = ({ children }) => {
       backgroundColor: theme => theme.palette.background.default,
       color: theme => theme.palette.getContrastText(theme.palette.background.default)
     }}>
+      <Dialogs />
       <Grid container >
         <Grid item xs={12}>
           <NavBar />
