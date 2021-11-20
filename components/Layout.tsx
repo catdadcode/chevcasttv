@@ -1,6 +1,7 @@
 import { FC, ReactNode, useEffect } from "react";
 import { Box, Dialogs, Footer, Grid, NavBar } from "components";
 import { useAppState } from "hooks/useAppState";
+import type { JwtPayload } from "types/JwtPayload";
 import axios from "axios";
 
 type Props = {
@@ -13,12 +14,7 @@ const Layout: FC<Props> = ({ children }) => {
   // Check for user and set if exists.
   useEffect(() => {
     (async () => {
-      type Data = {
-        avatar: string,
-        email: string,
-        username: string
-      } | false;
-      const { data } = await axios.get<Data>("/api/auth/session");
+      const { data } = await axios.get<JwtPayload | false>("/api/auth/session");
       if (!data) {
         dispatch("DELETE_USER");
         return;
