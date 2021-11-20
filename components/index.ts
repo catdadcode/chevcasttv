@@ -1,9 +1,13 @@
 // Material UI Components
+export { default as Accordion } from "@mui/material/Accordion";
+export { default as AccordionDetails } from "@mui/material/AccordionDetails";
+export { default as AccordionSummary } from "@mui/material/AccordionSummary";
 export { default as AppBar } from "@mui/material/AppBar";
 export { default as Autocomplete } from "@mui/material/Autocomplete";
 export { default as Avatar } from "@mui/material/Avatar";
 export { default as Box } from "@mui/material/Box";
 export { default as Button } from "@mui/material/Button";
+export { default as Card } from "@mui/material/Card";
 export { default as Chip } from "@mui/material/Chip";
 export { default as Divider } from "@mui/material/Divider";
 export { default as Drawer } from "@mui/material/Drawer";
@@ -24,6 +28,7 @@ export { default as Toolbar } from "@mui/material/Toolbar";
 export { default as Typography } from "@mui/material/Typography";
 
 // Material UI Icons
+export { default as ExpandMoreIcon } from "@mui/icons-material/ExpandMore";
 export { default as LoginIcon } from "@mui/icons-material/Login";
 export { default as LogoutIcon } from "@mui/icons-material/Logout";
 export { default as MenuIcon } from "@mui/icons-material/Menu";

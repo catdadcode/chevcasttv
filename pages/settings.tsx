@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next"
 import { Error } from "components";
 import { useAppState } from "hooks/useAppState";
 

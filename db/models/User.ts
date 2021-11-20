@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose";
+import { Schema, Model, model } from "mongoose";
 
-interface User {
+export interface IUser {
+  id: string;
   accessToken: string;
   accessTokenExpiration: Date;
   avatar: string;
@@ -10,7 +11,7 @@ interface User {
   username: string;
 }
 
-const schema = new Schema<User>({
+export const UserSchema = new Schema<IUser>({
   accessToken: { type: String, required: true },
   accessTokenExpiration: { type: Date, required: true },
   avatar: { type: String, required: true },
@@ -20,4 +21,4 @@ const schema = new Schema<User>({
   username: { type: String, required: true }
 });
 
-export default global.userModel = global.userModel ?? model<User>("User", schema);
+export const User: Model<IUser> = global.userModel = global.userModel ?? model<IUser>("User", UserSchema);

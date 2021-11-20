@@ -1,7 +1,8 @@
-import { Mongoose, Model } from "mongoose";
+import { Mongoose } from "mongoose";
 declare global {
   var mongoose: Mongoose;
-  var userModel: Model;
+  var userModel: any;
+  var ptsTimeSlotModel: any;
 }
 
 declare module '@mui/material/styles' {

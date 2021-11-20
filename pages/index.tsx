@@ -1,4 +1,4 @@
-import type { NextPage } from 'next'
+import type { NextPage } from "next"
 import { useTheme } from "@mui/material/styles";
 import { HeroSection } from "components";
 

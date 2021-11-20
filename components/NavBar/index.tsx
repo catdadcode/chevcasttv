@@ -93,7 +93,7 @@ const NavBar = () => {
               <Button
                 variant="contained"
                 size="large"
-                startIcon={<DiscordIcon sx={{ width: 25, height: 25 }} color="#333" />}
+                // startIcon={<DiscordIcon sx={{ width: 25, height: 25 }} color="#333" />}
                 onClick={() => window.location.assign("/api/auth/login")}
               >Sign In</Button>
             }

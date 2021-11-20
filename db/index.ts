@@ -13,4 +13,9 @@ export const initialize = async () => {
   connection.on("error", console.log);
 };
 
-export { default as User } from "./models/User";
+export const close = async () => {
+  mongoose.connection.close();
+}
+
+export * from "./models/User";
+export * from "./models/PTSTimeSlot";

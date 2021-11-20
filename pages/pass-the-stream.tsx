@@ -1,0 +1,112 @@
+import type { NextPage } from "next";
+import moment from "moment";
+import { PTSTimeSlot, IPTSTimeSlot } from "db";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Divider,
+  ExpandMoreIcon,
+  Typography
+} from "components";
+
+type Props = {
+  timeSlots: IPTSTimeSlot[]
+};
+
+const PassTheStream: NextPage<Props> = ({ timeSlots }) => {
+  const timeSlotList = timeSlots.map((timeSlot, index) => {
+    const startTime = <>
+      <Box sx={{color: "success.dark"}}>{moment(timeSlot.startTime).format("MM/D")}</Box>
+      <Box sx={{fontWeight: "bold", color: "success.light" }}>{moment(timeSlot.startTime).format("h a")}</Box>
+    </>;
+    const endTime = <>
+      <Box sx={{color: "success.dark"}}>{moment(timeSlot.endTime).format("MM/D")}</Box>
+      <Box sx={{fontWeight: "bold", color: "success.light" }}>{moment(timeSlot.endTime).format("h a")}</Box>
+    </>;
+    return (
+      <Accordion key={timeSlot.id} square={true}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ mt: 0.5 }}>
+          <Box sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "100%"
+          }}>
+
+            <Box sx={{
+              textAlign: "center",
+            }}>{startTime}</Box>
+
+            <Box sx={{
+              textAlign: "center",
+              width: 150,
+              color: "text.secondary",
+            }}>to</Box>
+
+            <Box sx={{
+              textAlign: "center",
+            }}>{endTime}</Box>
+
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Divider />
+          <Box sx={{maxWidth: "600px", m: "auto"}}>
+            <Box sx={{
+              display: "flex",
+              mt: 5
+            }}>
+              <Box sx={{color: "text.secondary", width: "100px", textAlign: "right"}}>
+                Scheduled:
+              </Box>
+              <Box sx={{ml: 1, width: "75%"}}>
+                <Chip sx={{ ml: 1, backgroundColor: "#030", border: "solid 1px", borderColor: "success.dark" }} label={<><Avatar sx={{display: "inline-block", verticalAlign: "middle", mr: 1, width: 45, height: 45, border: "solid 2px", borderColor: "success.light" }} src="https://cdn.discordapp.com/avatars/251192242834767873/5094265c229f1aa6502785dd8238ae58.png" /> ChevCast</>} onDelete={() => {}} variant="outlined" />
+              </Box>
+            </Box>
+            <Box sx={{
+              mt: 3,
+              display: "flex"
+            }}>
+              <Box sx={{color: "text.secondary", width: "100px", textAlign: "right"}}>
+                Backups:
+              </Box>
+              <Box sx={{ml: 1, width: "75%"}}>
+                <Chip sx={{ ml: 1, backgroundColor: "#330", border: "solid 1px #770", m: 0.5 }} label="HarlequinDollface" onDelete={() => {}} variant="outlined" />
+                <Chip sx={{ ml: 1, backgroundColor: "#330", border: "solid 1px #770", m: 0.5 }} label="MeantToBri" onDelete={() => {}} variant="outlined" />
+                <Chip sx={{ ml: 1, backgroundColor: "#330", border: "solid 1px #770", m: 0.5 }} label="Ember_Stone" onDelete={() => {}} variant="outlined" />
+                <Chip sx={{ ml: 1, backgroundColor: "#330", border: "solid 1px #770", m: 0.5 }} label="Alopex_Art" onDelete={() => {}} variant="outlined" />
+                <Chip sx={{ ml: 1, backgroundColor: "#330", border: "solid 1px #770", m: 0.5 }} label="SithLordBoris" onDelete={() => {}} variant="outlined" />
+                <Chip sx={{ ml: 1, backgroundColor: "#330", border: "solid 1px #770", m: 0.5 }} label="RheasRags" onDelete={() => {}} variant="outlined" />
+              </Box>
+            </Box>
+            <Box sx={{display: "flex", justifyContent: "space-around", mt: 5}}>
+              <Button variant="contained" color="success">RSVP!</Button>
+              {/* <Button variant="contained" color="info">RSVP as a backup</Button> */}
+            </Box>
+          </Box>
+        </AccordionDetails>
+      </Accordion>
+    );
+  });
+
+  return <Box sx={{color: "success.dark"}}>{timeSlotList}</Box>;
+};
+
+export async function getServerSideProps() {
+  const timeSlots = (await PTSTimeSlot.find()).map(timeSlot => timeSlot.toJSON({
+    transform: (doc, ret) => {
+      ret.id = ret._id.toString();
+      ret.startTime = ret.startTime.toString();
+      ret.endTime = ret.endTime.toString();
+      delete ret._id;
+    }
+  }));
+  return { props: { timeSlots } };
+}
+
+export default PassTheStream;
