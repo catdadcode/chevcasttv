@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
+import type { IPTSTimeSlot } from "db";
 import moment from "moment";
-import { PTSTimeSlot, IPTSTimeSlot } from "db";
+import axios from "axios";
 import {
   Accordion,
   AccordionDetails,
@@ -10,9 +11,11 @@ import {
   Button,
   Chip,
   Divider,
-  ExpandMoreIcon,
-  Typography
+  ExpandMoreIcon
 } from "components";
+
+
+const APP_URL = process?.env.NEXT_PUBLIC_APP_URL?.toString() ?? "";
 
 type Props = {
   timeSlots: IPTSTimeSlot[]
@@ -100,14 +103,7 @@ const PassTheStream: NextPage<Props> = ({ timeSlots }) => {
 };
 
 export async function getServerSideProps() {
-  const timeSlots = (await PTSTimeSlot.find()).map(timeSlot => timeSlot.toJSON({
-    transform: (doc, ret) => {
-      ret.id = ret._id.toString();
-      ret.startTime = ret.startTime.toString();
-      ret.endTime = ret.endTime.toString();
-      delete ret._id;
-    }
-  }));
+  const { data: timeSlots } = await axios.get<IPTSTimeSlot[]>(`${APP_URL}/api/time-slots`);
   return { props: { timeSlots } };
 }
 
