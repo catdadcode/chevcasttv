@@ -70,7 +70,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   // Use email to look for existing user.
-  let user;
+  let user: InstanceType<typeof User> | null = null;
+  let payload: JwtPayload | null = null;
   if (sessionToken) {
     try {
       const payload = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
@@ -110,23 +111,23 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await user.save();
 
   // Create JSON Web Token and store in cookie.
-  if (!sessionToken) {
-    const payload = JSON.stringify({
+  if (!payload) {
+    payload = {
       avatar: avatarUrl,
-      discordId: user.discord?.id,
       email,
       twitchId: user.twitch?.id,
       userId: user.id,
       username
-    } as JwtPayload);
-    sessionToken = jwt.sign(payload, JWT_SECRET);
-    cookies.set("session_token", sessionToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      overwrite: true,
-      expires: moment().add(30, "days").toDate()
-    });
+    };
   }
+  payload.discordId = user.discord?.id;
+  sessionToken = jwt.sign(JSON.stringify(payload), JWT_SECRET);
+  cookies.set("session_token", sessionToken, {
+    httpOnly: true,
+    sameSite: "lax",
+    overwrite: true,
+    expires: moment().add(30, "days").toDate()
+  });
   res.redirect(decodeURIComponent(state));
 };
 

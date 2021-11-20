@@ -6,6 +6,7 @@ import { User, PTSTimeSlot } from "db";
 import type { JwtPayload } from "types/JwtPayload";
 
 const {
+  APP_URL,
   JWT_SECRET
 } = config;
 
@@ -23,6 +24,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!timeSlot.backupRSVPs) timeSlot.backupRSVPs = [];
   timeSlot.backupRSVPs.push(user._id);
   await timeSlot.save();
+  if (req.headers.accept?.toLowerCase().includes("text/html")) {
+    res.redirect(`${APP_URL}/pass-the-stream`);
+    return;
+  }
   res.json({
     id: userId,
     avatar: user.twitch.avatar,

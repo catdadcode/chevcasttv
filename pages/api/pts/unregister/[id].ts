@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (!sessionToken) return res.status(403).send("Not Authorized");
   const { userId } = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
   if (timeSlot.RSVP?.toString() !== userId) return res.status(403).send("Not Authorized");
-  delete timeSlot.RSVP;
+  timeSlot.RSVP = undefined;
   await timeSlot.save();
   if (req.headers.accept?.toLowerCase().includes("text/html")) {
     res.redirect(`${APP_URL}/pass-the-stream`);

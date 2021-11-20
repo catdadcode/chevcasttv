@@ -127,7 +127,7 @@ const PassTheStream: NextPage<Props> = (props) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            width: "100%"
+            width: "calc(100% - 15rem)"
           }}>
 
             <Box sx={{
@@ -144,6 +144,47 @@ const PassTheStream: NextPage<Props> = (props) => {
               textAlign: "center",
             }}>{endTimeText}</Box>
 
+          </Box>
+          <Box sx={{
+            mr: 2,
+            width: "15rem",
+            textAlign: "right",
+            overflow: "hidden",
+            position: "relative"
+          }}>
+            { timeSlot.backupRSVPs &&
+              timeSlot.backupRSVPs.reverse().map((twitchUser, index) => ( 
+                <>
+                  <Avatar src={twitchUser.avatar} sx={{
+                    position: "absolute",
+                    right: ((timeSlot.backupRSVPs!.length - index) * 30),
+                    width: 40,
+                    height: 40,
+                    border: "solid 1px",
+                    borderColor: "warning.dark",
+                  }} />
+                  <Box sx={{
+                    position: "absolute",
+                    right: ((timeSlot.backupRSVPs!.length - index) * 30),
+                    width: 40,
+                    height: 40,
+                    borderRadius: 40,
+                    backgroundColor: "warning.dark",
+                    opacity: 0.3
+                  }} />
+                </>
+              ))
+            }
+            { timeSlot.RSVP && 
+              <Avatar src={timeSlot.RSVP.avatar} sx={{
+                position: "absolute",
+                right: 0,
+                width: 40,
+                height: 40,
+                border: "solid 2px",
+                borderColor: "success.dark"
+              }} />
+            }
           </Box>
         </AccordionSummary>
         <AccordionDetails>
@@ -207,12 +248,12 @@ const PassTheStream: NextPage<Props> = (props) => {
                     key={twitchUser.id}
                     sx={{
                       ml: 1,
-                      backgroundColor: "#033",
+                      backgroundColor: "#330",
                       border: "solid 1px",
-                      borderColor: "info.dark",
+                      borderColor: "warning.dark",
                       m: 1,
                       "&:hover": {
-                        backgroundColor: "#055 !important"
+                        backgroundColor: "#550 !important"
                       }
                     }}
                     label={
@@ -225,7 +266,7 @@ const PassTheStream: NextPage<Props> = (props) => {
                             width: 40,
                             height: 40,
                             border: "solid 2px",
-                            borderColor: "info.light",
+                            borderColor: "warning.light",
                             cursor: "pointer"
                           }}
                           onClick={() => window.location.assign(`https://twitch.tv/${twitchUser.username}`)}
@@ -268,7 +309,7 @@ const PassTheStream: NextPage<Props> = (props) => {
                 (!user || !timeSlot.backupRSVPs?.map(user => user.id).includes(user.userId)) &&
                 <Button
                   variant="contained"
-                  color="info"
+                  color="warning"
                   startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
                   onClick={() => registerBackup(timeSlot)}
                   sx={{

@@ -21,7 +21,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const payload = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
   cookies.set("session_token", sessionToken, {
     httpOnly: true,
-    sameSite: true,
+    sameSite: "lax",
     overwrite: true,
     expires: moment().add(30, "days").toDate()
   });
