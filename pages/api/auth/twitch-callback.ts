@@ -87,7 +87,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch {}
   }
   if (!user) {
-    user = await User.findOne({ "twitch.email": email });
+    user = await User.findOne({ "twitch.id": id });
   }
   if (!user) {
     user = new User({
@@ -108,25 +108,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         accessToken: access_token,
         accessTokenExpiration: new Date(expires_in),
         avatar: profile_image_url,
+        id,
+        email,
         refreshToken: refresh_token,
         username: display_name
       }
     });
   }
-  user.save();
+  await user.save();
 
   // Create JSON Web Token and store in cookie.
   if (!sessionToken) {
     const payload = JSON.stringify({
       avatar: profile_image_url,
+      discordId: user.discord?.id,
       email,
+      twitchId: user.twitch?.id,
       userId: user.id,
       username: display_name
     } as JwtPayload);
     sessionToken = jwt.sign(payload, JWT_SECRET);
     cookies.set("session_token", sessionToken, {
       httpOnly: true,
-      sameSite: true,
+      sameSite: "lax",
       overwrite: true,
       expires: moment().add(30, "days").toDate()
     });

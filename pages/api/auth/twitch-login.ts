@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     scope: "user:read:email",
     redirect_uri: `${APP_URL}/api/auth/twitch-callback`,
     prompt: "none",
-    state: req.headers.referer ?? req.headers.referrer ?? APP_URL 
+    state: req.query.redirectUrl ?? req.headers.referer ?? req.headers.referrer ?? APP_URL 
   });
   res.redirect(`${TWITCH_OAUTH_URL}/authorize?${params.toString()}`);
 };

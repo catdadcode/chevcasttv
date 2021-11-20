@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import type { NextPage } from "next"
-import { Error } from "components";
 import { useAppState } from "hooks/useAppState";
 
 const Settings: NextPage = () => {
-  const { state: { user } } = useAppState();
+  const { state: { user }, dispatch } = useAppState();
 
-  if (!user) return <Error type="NotAuthorized" />;
+  useEffect(() => {
+    if (!user) {
+      dispatch("OPEN_ERROR", { type: "NotAuthorized" });
+    }
+  }, [user])
 
   return (
     <h1>Settings!</h1>

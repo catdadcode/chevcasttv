@@ -15,7 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     scope: "identify email guilds guilds.join",
     redirect_uri: `${APP_URL}/api/auth/discord-callback`,
     prompt: "none",
-    state: req.headers.referer ?? req.headers.referrer ?? APP_URL 
+    state: req.query.redirectUrl ?? req.headers.referer ?? req.headers.referrer ?? APP_URL 
   });
   res.redirect(`${DISCORD_OAUTH_URL}/authorize?${params.toString()}`);
 };

@@ -41,7 +41,6 @@ export { default as SettingsIcon } from "@mui/icons-material/Settings";
 // Custom Components
 export { default as Dialogs } from "./Dialogs";
 export { default as DrawerNav } from "./NavBar/DrawerNav";
-export { default as Error } from "./Error";
 export { default as Footer } from "./Footer";
 export { default as HeroSection } from "./HeroSection";
 

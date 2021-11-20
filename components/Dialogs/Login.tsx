@@ -1,8 +1,6 @@
-
 import React from "react";
 import { useAppState } from "hooks/useAppState";
 import {
-  Box,
   Button,
   Dialog,
   DialogTitle,

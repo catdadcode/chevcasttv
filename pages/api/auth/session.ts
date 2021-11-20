@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import Cookies from "cookies";
 import moment from "moment";
 import config from "config";
+import type { JwtPayload } from "types/JwtPayload";
 
 const {
   JWT_SECRET
@@ -17,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.send(false);
     return;
   }
-  const payload = jwt.verify(sessionToken, JWT_SECRET);
+  const payload = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
   cookies.set("session_token", sessionToken, {
     httpOnly: true,
     sameSite: true,

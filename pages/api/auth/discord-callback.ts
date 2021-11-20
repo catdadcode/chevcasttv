@@ -78,7 +78,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     } catch {}
   }
   if (!user) {
-    user = await User.findOne({ "discord.email": email });
+    user = await User.findOne({ "discord.id": id });
   }
   const avatarUrl = `${DISCORD_CDN_URL}/avatars/${id}/${avatar}.png`;
   if (!user) {
@@ -100,25 +100,29 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         accessToken: access_token,
         accessTokenExpiration: new Date(expires_in),
         avatar: avatarUrl,
+        id,
+        email,
         refreshToken: refresh_token,
         username
       }
     });
   }
-  user.save();
+  await user.save();
 
   // Create JSON Web Token and store in cookie.
   if (!sessionToken) {
     const payload = JSON.stringify({
       avatar: avatarUrl,
+      discordId: user.discord?.id,
       email,
+      twitchId: user.twitch?.id,
       userId: user.id,
       username
     } as JwtPayload);
     sessionToken = jwt.sign(payload, JWT_SECRET);
     cookies.set("session_token", sessionToken, {
       httpOnly: true,
-      sameSite: true,
+      sameSite: "lax",
       overwrite: true,
       expires: moment().add(30, "days").toDate()
     });
