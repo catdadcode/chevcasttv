@@ -169,7 +169,7 @@ const PassTheStream: NextPage<Props> = (props) => {
             verticalAlign: "middle"
           }}>
             { timeSlot.backupRSVPs &&
-              [...timeSlot.backupRSVPs].reverse().map((twitchUser, index) => ( 
+              timeSlot.backupRSVPs.map((twitchUser, index) => ( 
                 <Fragment key={twitchUser.id}>
                   <Avatar src={twitchUser.avatar} sx={{
                     position: "absolute",
