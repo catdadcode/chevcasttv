@@ -169,7 +169,7 @@ const PassTheStream: NextPage<Props> = (props) => {
             verticalAlign: "middle"
           }}>
             { timeSlot.backupRSVPs &&
-              timeSlot.backupRSVPs.reverse().map((twitchUser, index) => ( 
+              [...timeSlot.backupRSVPs].reverse().map((twitchUser, index) => ( 
                 <Fragment key={twitchUser.id}>
                   <Avatar src={twitchUser.avatar} sx={{
                     position: "absolute",
@@ -309,35 +309,31 @@ const PassTheStream: NextPage<Props> = (props) => {
               mt: 6,
               mb: 3
             }}>
-              { !timeSlot.RSVP &&
-                (!user || !timeSlot.backupRSVPs?.map(user => user.id).includes(user.userId)) &&
-                <Button
-                  variant="contained"
-                  color="success"
-                  startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
-                  onClick={() => register(timeSlot)}
-                  sx={{
-                    color: "#030",
-                    fontWeight: "bold",
-                    width: 300,
-                    mb: 2
-                  }}
-                >Sign Me Up!</Button>
-              }
-              { (!timeSlot.RSVP || !user || timeSlot.RSVP.id !== user.userId) &&
-                (!user || !timeSlot.backupRSVPs?.map(user => user.id).includes(user.userId)) &&
-                <Button
-                  variant="contained"
-                  color="warning"
-                  startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
-                  onClick={() => registerBackup(timeSlot)}
-                  sx={{
-                    color: "#030",
-                    fontWeight: "bold",
-                    width: 300
-                  }}
-                >Volunteer as a Backup</Button>
-              }
+              <Button
+                disabled={timeSlot.RSVP !== undefined || (user && timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId))}
+                variant="contained"
+                color="success"
+                startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
+                onClick={() => register(timeSlot)}
+                sx={{
+                  color: "#030",
+                  fontWeight: "bold",
+                  width: 300,
+                  mb: 2
+                }}
+              >Sign Me Up!</Button>
+              <Button
+                disabled={ user && (timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId) || timeSlot.RSVP?.id === user?.userId)}
+                variant="contained"
+                color="warning"
+                startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
+                onClick={() => registerBackup(timeSlot)}
+                sx={{
+                  color: "#030",
+                  fontWeight: "bold",
+                  width: 300
+                }}
+              >Volunteer as a Backup</Button>
             </Box>
           </Box>
         </AccordionDetails>
