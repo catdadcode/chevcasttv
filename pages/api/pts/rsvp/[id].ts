@@ -21,6 +21,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const user = await User.findById(userId);
   if (!user) throw new Error(`Unable to find user with ID ${userId}`);
   if (!user.twitch) throw new Error(`User ${userId} does not have a connected Twitch account`);
+  const rsvps = await PTSTimeSlot.find({ RSVP: user._id });
+  if (rsvps.length > 2) throw new Error("You can only register for at most 2 time windows.");
   timeSlot.RSVP = user._id;
   await timeSlot.save();
   if (req.headers.accept?.toLowerCase().includes("text/html")) {
