@@ -22,7 +22,7 @@ const Home: NextPage = () => {
         m: "auto",
         mt: 2,
         mb: 2,
-        width: 500
+        maxWidth: 500
       }}>
         <Typography variant="h3" sx={{
           textAlign: "center",
