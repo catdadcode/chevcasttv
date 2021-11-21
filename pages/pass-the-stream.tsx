@@ -263,7 +263,7 @@ const PassTheStream: NextPage<Props> = (props) => {
               </Box>
               <Box sx={{ml: 1, width: "75%"}}>
                 { timeSlot.backupRSVPs && timeSlot.backupRSVPs.length > 0 ?
-                  timeSlot.backupRSVPs.map(twitchUser => <Chip
+                  timeSlot.backupRSVPs.map((twitchUser: TwitchUser) => <Chip
                     key={twitchUser.id}
                     sx={{
                       ml: 1,
@@ -310,7 +310,7 @@ const PassTheStream: NextPage<Props> = (props) => {
               mb: 3
             }}>
               <Button
-                disabled={timeSlot.RSVP !== undefined || (user && timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId))}
+                disabled={timeSlot.RSVP !== undefined || (user && timeSlot.backupRSVPs?.map((u: TwitchUser) => u.id).includes(user.userId))}
                 variant="contained"
                 color="success"
                 startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
@@ -362,7 +362,7 @@ const PassTheStream: NextPage<Props> = (props) => {
             mb: 2
           }}>Pass The Stream!</Typography>
           <Typography variant="body1">
-            ChevCast is sponsoring a Pass The Stream event! We're blocking out a 24 hour period and allowing streamers of all stripes to register to participate. Use the form below to register for your desired time window! 
+            ChevCast is sponsoring a Pass The Stream event! We&apos;re blocking out a 24 hour period and allowing streamers of all stripes to register to participate. Use the form below to register for your desired time window! 
           </Typography>
           <Divider sx={{mt: 2, mb: 2}} />
           <Typography variant="h4" sx={{
@@ -371,7 +371,7 @@ const PassTheStream: NextPage<Props> = (props) => {
             mb: 1
           }}>What is it?</Typography>
           <Typography variant="body2">
-            Pass The Stream is an event where streamers sign up to stream for portions of a given time period (often 24 hours). At the end of each streamer's scheduled window they will pass all their viewers along to the next person via <Link href="https://help.twitch.tv/s/article/how-to-use-raids?language=en_US">Twitch Raid.</Link>
+            Pass The Stream is an event where streamers sign up to stream for portions of a given time period (often 24 hours). At the end of each streamer&apos;s scheduled window they will pass all their viewers along to the next person via <Link href="https://help.twitch.tv/s/article/how-to-use-raids?language=en_US">Twitch Raid.</Link>
           </Typography>
           <Divider sx={{mt: 2, mb: 2}} />
           <Typography variant="h4" sx={{
@@ -389,12 +389,12 @@ const PassTheStream: NextPage<Props> = (props) => {
             mb: 1
           }}>How do I sign up?</Typography>
           <Typography variant="body2">
-            Simply scroll down and tap to expand the desired time window you'd like to stream. Each window is 1 hour long and you can register as the active streamer for up to 2 windows.
+            Simply scroll down and tap to expand the desired time window you&apos;d like to stream. Each window is 1 hour long and you can register as the active streamer for up to 2 windows.
             <br />
             <br />
-            If nobody has taken that window then you can claim it for yourself by tapping "Sign Me Up!" However, even if someone has taken a window you are still free to register as a backup.
+            If nobody has taken that window then you can claim it for yourself by tapping &quot;Sign Me Up!&quot; However, even if someone has taken a window you are still free to register as a backup.
             <br />
-            These kinds of events a prone to cancellations; if you're eager to stream as much as possible then sign up as a backup as much as you like. There are no limits to the number of backup windows you sign up for!
+            These kinds of events a prone to cancellations; if you&apos;re eager to stream as much as possible then sign up as a backup as much as you like. There are no limits to the number of backup windows you sign up for!
           </Typography>
           <Divider sx={{mt: 2, mb: 2}} />
           <Typography variant="h4" sx={{
@@ -403,7 +403,7 @@ const PassTheStream: NextPage<Props> = (props) => {
             mb: 1
           }}>How do I cancel?</Typography>
           <Typography variant="body2">
-            When clicking sign up it will ask you to authenticate using your Twitch account. To modify your registration status simply login in the top right and select "Twitch" as your login method. You will then see little "X" buttons next to your name in the time window panels. Clicking those will remove your registration.
+            When clicking sign up it will ask you to authenticate using your Twitch account. To modify your registration status simply login in the top right and select Twitch as your login method. You will then see little X buttons next to your name in the time window panels. Clicking those will remove your registration.
           </Typography>
         </Collapse>
       </Box>

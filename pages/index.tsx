@@ -33,7 +33,7 @@ const Home: NextPage = () => {
         <Typography variant="body1" sx={{
           m: 2
         }}>
-          ChevCast is sponsoring a Pass The Stream event! We're blocking out a 24 hour period and allowing streamers of all stripes to register to participate. 
+          ChevCast is sponsoring a Pass The Stream event! We&apos;re blocking out a 24 hour period and allowing streamers of all stripes to register to participate. 
         </Typography>
         <Divider />
         <Box sx={{ textAlign: "center" }}>
