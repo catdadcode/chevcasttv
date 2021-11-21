@@ -23,8 +23,8 @@ const TabNav: FC = () => {
       onChange={(e, page) => router.push(page)}
     >
       <Tab value="/" label="Home" />
-      <Tab value="/chevbot" label="Chevbot" />
-      <Tab value="/videos" label="Videos" />
+      {/* <Tab value="/chevbot" label="Chevbot" /> */}
+      {/* <Tab value="/videos" label="Videos" /> */}
     </Tabs>
   );
 }

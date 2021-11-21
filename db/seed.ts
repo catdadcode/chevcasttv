@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config({ path: ".env.local" });
 import debug from "debug";
-import moment from "moment";
+import moment from "moment-timezone";
 import { initialize, close, PTSTimeSlot } from "./index";
 
 const log = debug("CHEVCASTTV:SEED-SCRIPT");
@@ -16,8 +16,8 @@ const main = async () => {
       await PTSTimeSlot.deleteMany();
       log("Done.");
       log("Creating time slots...");
-      const totalHours = 24;
-      const eventStartTime = moment("Fri, 03 Dec 2021 19:00:00 MST");
+      const totalHours = 26;
+      const eventStartTime = moment("Fri, 03 Dec 2021 19:00:00 PST");
       for (let hour = 0; hour < totalHours; hour++) {
         const timeSlot = new PTSTimeSlot({
           startTime: moment(eventStartTime).add(hour, "hours").toDate(),

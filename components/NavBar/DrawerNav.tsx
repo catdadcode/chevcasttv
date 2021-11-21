@@ -27,7 +27,7 @@ const DrawerNav = () => {
         >
           <ListItemText primary="Home" /> 
         </ListItem>
-        <ListItem
+        {/* <ListItem
           button
           disabled={router.pathname === "/chevbot"}
           onClick={() => navigate("/chevbot")}
@@ -40,7 +40,7 @@ const DrawerNav = () => {
           onClick={() => navigate("/videos")}
         >
           <ListItemText primary="Videos" /> 
-        </ListItem>
+        </ListItem> */}
       </List>
     </Drawer>
   );
