@@ -52,6 +52,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
   } catch (err: any) {
+    if (req.headers.accept?.toLowerCase().includes("text/html")) {
+      res.redirect(`${APP_URL}/pass-the-stream`);
+      return;
+    }
     res.status(500).send(err.message ?? err.toString());
   }
 }
