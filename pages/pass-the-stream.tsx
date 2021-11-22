@@ -325,7 +325,7 @@ const PassTheStream: NextPage<Props> = (props) => {
                 }}
               >Sign Me Up!</Button>
               <Button
-                disabled={(user && (registrationMaxedOut || (timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId) || timeSlot.RSVP?.id === user.userId)))}
+                disabled={(user && (timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId) || timeSlot.RSVP?.id === user.userId))}
                 variant="contained"
                 color="warning"
                 startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
