@@ -57,6 +57,8 @@ const PassTheStream: NextPage<Props> = (props) => {
   const { state, dispatch } = useAppState();
   const { user } = state;
 
+  const registrationMaxedOut = timeSlots.filter(timeSlot => timeSlot.RSVP?.id === user?.userId).length === 2;
+
   const register = async (timeSlot: TimeSlot) => {
     try {
       if (!user || !user.twitchId) {
@@ -310,7 +312,7 @@ const PassTheStream: NextPage<Props> = (props) => {
               mb: 3
             }}>
               <Button
-                disabled={timeSlot.RSVP !== undefined || (user && timeSlot.backupRSVPs?.map((u: TwitchUser) => u.id).includes(user.userId))}
+                disabled={registrationMaxedOut || timeSlot.RSVP !== undefined || (user && timeSlot.backupRSVPs?.map((u: TwitchUser) => u.id).includes(user.userId))}
                 variant="contained"
                 color="success"
                 startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
@@ -323,7 +325,7 @@ const PassTheStream: NextPage<Props> = (props) => {
                 }}
               >Sign Me Up!</Button>
               <Button
-                disabled={ user && (timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId) || timeSlot.RSVP?.id === user?.userId)}
+                disabled={ registrationMaxedOut || (user && (timeSlot.backupRSVPs?.map(u => u.id).includes(user.userId)) || timeSlot.RSVP?.id === user?.userId)}
                 variant="contained"
                 color="warning"
                 startIcon={<TwitchIcon sx={{ width: 25, height: 25, mr: 1 }} color="#030" />}
