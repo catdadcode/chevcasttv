@@ -58,8 +58,8 @@ const validateToken = async () => {
   Object.assign(user, {
     restream: {
       accessToken: data.accessToken,
-      refreshToken: data.refreshToken,
-      expiresAt: data.accessTokenExpiresAt
+      accessTokenExpiration: data.accessTokenExpiresAt,
+      refreshToken: data.refreshToken
     }
   });
   log("Token refreshed. Updating database...");
