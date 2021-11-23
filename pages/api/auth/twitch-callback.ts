@@ -78,17 +78,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   );
 
-  // Use email to look for existing user.
-  let user: InstanceType<typeof User> | null = null;
+  // Look for user by Twitch ID.
+  let user = await User.findOne({ "twitch.id": id });
   let payload: JwtPayload | null = null;
   if (sessionToken) {
     try {
       payload = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
       user = await User.findById(payload.userId);
     } catch {}
-  }
-  if (!user) {
-    user = await User.findOne({ "twitch.id": id });
   }
   if (!user) {
     user = new User({

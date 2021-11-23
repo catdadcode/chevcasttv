@@ -249,7 +249,7 @@ const PassTheStream: NextPage<Props> = (props) => {
                         { timeSlot.RSVP.username }
                       </>
                     }
-                    onDelete={timeSlot.RSVP.id === user?.userId ? () => unregister(timeSlot) : undefined}
+                    onDelete={timeSlot.RSVP.id === user?.userId || user?.userId === process.env.NEXT_PUBLIC_CHEV_ID ? () => unregister(timeSlot) : undefined}
                     variant="outlined"
                   /> :
                   <span>No one has signed up for this window yet.</span>
@@ -296,7 +296,7 @@ const PassTheStream: NextPage<Props> = (props) => {
                         { twitchUser.username }
                       </>
                     }
-                    onDelete={twitchUser.id === user?.userId ? () => unregisterBackup(timeSlot) : undefined}
+                    onDelete={twitchUser.id === user?.userId || user?.userId === process.env.NEXT_PUBLIC_CHEV_ID ? () => unregisterBackup(timeSlot) : undefined}
                     variant="outlined"
                   />) :
                   <span>No one has signed up as a backup for this window yet.</span>

@@ -69,19 +69,17 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
   });
 
-  // Use email to look for existing user.
-  let user: InstanceType<typeof User> | null = null;
+  // Look for existing user by Discord ID.
+  let user = await User.findOne({ "discord.id": id });
   let payload: JwtPayload | null = null;
-  if (sessionToken) {
+  if (!user && sessionToken) {
     try {
       const payload = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
       user = await User.findById(payload.userId);
     } catch {}
   }
-  if (!user) {
-    user = await User.findOne({ "discord.id": id });
-  }
   const avatarUrl = `${DISCORD_CDN_URL}/avatars/${id}/${avatar}.png`;
+
   if (!user) {
     user = new User({
       primaryProvider: "discord",

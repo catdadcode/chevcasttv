@@ -7,6 +7,7 @@ import type { JwtPayload } from "types/JwtPayload";
 
 const {
   APP_URL,
+  CHEV_ID,
   JWT_SECRET
 } = config;
 
@@ -18,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const sessionToken = cookies.get("session_token");
   if (!sessionToken) return res.status(403).send("Not Authorized");
   const { userId } = jwt.verify(sessionToken, JWT_SECRET) as JwtPayload;
-  if (!timeSlot.backupRSVPs?.map(b => b.toString()).includes(userId)) return res.status(403).send("Not Authorized");
+  if (!timeSlot.backupRSVPs?.map(b => b.toString()).includes(userId) && userId !== CHEV_ID) return res.status(403).send("Not Authorized");
   const index = timeSlot.backupRSVPs.findIndex(b => b.toString() === userId);
   timeSlot.backupRSVPs.splice(index, 1);
   await timeSlot.save();
