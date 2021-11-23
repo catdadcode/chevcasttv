@@ -20,6 +20,11 @@ export interface IUser {
     id: string;
     refreshToken: string;
     username: string;
+  },
+  restream?: {
+    accessToken: string;
+    accessTokenExpiration: Date;
+    refreshToken: string;
   }
 }
 
@@ -42,7 +47,12 @@ export const UserSchema = new Schema<IUser>({
     id: { type: String, required: true },
     refreshToken: { type: String, required: true },
     username: { type: String, required: true }
-  }, required: false }
+  }, required: false },
+  restream: { type: {
+    accessToken: { type: String, required: true },
+    accessTokenExpiration: { type: String, required: true },
+    refreshToken: { type: String, required: true }
+  }, required: false}
 });
 
 export const User: Model<IUser> = global.userModel = global.userModel ?? model<IUser>("User", UserSchema);

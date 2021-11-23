@@ -10,6 +10,7 @@ import logger from "./logger";
 import { initialize as initDiscord } from "./api-clients/discordClient";
 import { initialize as initGoogleTTS } from "./api-clients/googleTTSClient";
 import { initialize as initTwitch } from "./api-clients/twitchClient";
+import { initialize as initRestream } from "./api-clients/restreamClient";
 import Chatbot from "./chatbot";
 
 const log = logger.extend("SERVER");
@@ -54,7 +55,8 @@ const {
   await Promise.all([
     initDiscord(),
     initGoogleTTS(),
-    initTwitch()
+    initTwitch(),
+    initRestream()
   ]);
   log("API clients ready.");
 
@@ -66,7 +68,8 @@ const {
         discordChannelIds: [
           DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
           DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-        ]
+        ],
+        chevRestream: true
       }).initialize(),
       new Chatbot({
         twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
@@ -83,7 +86,8 @@ const {
       discordChannelIds: [
         DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
         DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-      ]
+      ],
+      chevRestream: true
     }).initialize();
   }
   console.log("> Chatbots are now active.");

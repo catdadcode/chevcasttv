@@ -2,9 +2,9 @@ import emojiRegex from "emoji-regex";
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
 import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
+import { listen as restreamListen } from "./api-clients/restreamClient";
 import logger from "./logger";
 import config from "config";
-import packageJson from "../package.json";
 
 const {
   CONTEXT_TIMEOUT
@@ -13,6 +13,7 @@ const {
 type Options = {
   twitchChannels: string[];
   discordChannelIds: string[];
+  chevRestream?: boolean
 };
 
 export default class Chatbot {
@@ -29,6 +30,7 @@ export default class Chatbot {
   };
 
   private availableVoices: string[] = [];
+  private chevRestream = false;
   private currentUser?: string;
   private discordChannelIds: string[];
   private log: debug.Debugger;
@@ -38,7 +40,8 @@ export default class Chatbot {
   private queueInProgress = false;
 
   constructor(options: Options) {
-    const { twitchChannels, discordChannelIds } = options;
+    const { twitchChannels, discordChannelIds, chevRestream } = options;
+    this.chevRestream = chevRestream ?? false;
     this.discordChannelIds = discordChannelIds;
     this.twitchChannels = twitchChannels;
     this.log = logger.extend("CHATBOT");
@@ -46,33 +49,36 @@ export default class Chatbot {
 
   async initialize() {
     this.log("Subscribing to Twitch channels...");
-    await twitchListen(this.twitchChannels, (username, message, channel, emotes) => {
-      if (emotes) {
-        const emoteStrings = Object.keys(emotes).map(emoteId => {
-          const [emoteRange] = emotes[emoteId];
-          const [start, end] = emoteRange.split("-");
-          const emoteString = message
-            .slice(parseInt(start), parseInt(end) + 1)
-            .replace(/\)/g, "\\)")
-            .replace(/\(/g, "\\(");
-          return emoteString;
-        });
-        const twitchEmoteRegex = new RegExp(`(${emoteStrings.join("|")})`, "g");
-        message = message.replace(twitchEmoteRegex, "");
-      }
-      message = message.replace(emojiRegex(), "");
-      if (message.match(/^\s*$/)) return;
-      this.queueMessage(username, message);
-    });
-    const readyMsg = (twitchChannels: string[]) => {
-      const channels = [...twitchChannels];
-      const version = packageJson.version.split(".").join(" point ");
-      if (channels.length === 1) return `Chevbot version ${version} is now listening to Twitch chat for ${channels.pop()}!`;
-      const lastChannel = channels.pop();
-      return `Chevbot version ${version} is now listening to Twitch chat for ${channels.join(", ")}, and ${lastChannel}!`;
+    const listeners: Promise<() => void>[] = [];
+    if (this.chevRestream) {
+      await restreamListen((username, message) => {
+        message = message.replace(emojiRegex(), "");
+        if (message.match(/^\s*$/)) return;
+        this.queueMessage(username, message);
+      })
+    } else {
+      await twitchListen(this.twitchChannels, (username, message, channel, emotes) => {
+        if (emotes) {
+          const emoteStrings = Object.keys(emotes).map(emoteId => {
+            const [emoteRange] = emotes[emoteId];
+            const [start, end] = emoteRange.split("-");
+            const emoteString = message
+              .slice(parseInt(start), parseInt(end) + 1)
+              .replace(/\)/g, "\\)")
+              .replace(/\(/g, "\\(");
+            return emoteString;
+          });
+          const twitchEmoteRegex = new RegExp(`(${emoteStrings.join("|")})`, "g");
+          message = message.replace(twitchEmoteRegex, "");
+        }
+        message = message.replace(emojiRegex(), "");
+        if (message.match(/^\s*$/)) return;
+        this.queueMessage(username, message);
+      });
     }
-    this.log(readyMsg(this.twitchChannels));
-    const audioContent = await createAudio(readyMsg(this.twitchChannels.map(this.cleanUsername)));
+    await Promise.all(listeners);
+    this.log("Chevbot online.");
+    const audioContent = await createAudio("Chevbot online.");
     await this.sendTTS(audioContent);
   }
 
@@ -141,7 +147,6 @@ export default class Chatbot {
 
   enunciateUsername(username: string) {
     username = this.cleanUsername(username);
-    // if (username.includes(" ")) username = username.slice(0, username.indexOf(" "));
     return username;
   }
 
