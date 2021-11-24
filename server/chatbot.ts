@@ -5,6 +5,10 @@ import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
 import { listen as restreamListen } from "./api-clients/restreamClient";
 import logger from "./logger";
 import config from "config";
+import fs from "fs";
+import util from "util";
+
+const readFile = util.promisify(fs.readFile);
 
 const {
   CONTEXT_TIMEOUT
@@ -78,7 +82,7 @@ export default class Chatbot {
     }
     await Promise.all(listeners);
     this.log("Chevbot online.");
-    const audioContent = await createAudio("Chevbot online.");
+    const audioContent = await readFile("./media/chevbot-online.wav");
     await this.sendTTS(audioContent);
   }
 
