@@ -83,6 +83,26 @@ export const initialize = async () => {
     });
   });
 
+  connection.on("error", console.log);
+
+  connection.on("close", async () => {
+    try {
+      await validateToken();
+      connection = await new Promise((resolve, reject) => {
+        wsClient.once("connect", connection => {
+          log("Websocket connected.");
+          resolve(connection);
+        });
+        wsClient.once("connectFailed", err => {
+          log(`Websocket connection failed: ${err}.`);
+          reject(err);
+        });
+      });
+    } catch (err: any) {
+      console.log(err.message || err.toString());
+    }
+  })
+
   connection.on("message", (message: WebSocketMessage) => {
     if ("binaryData" in message) return;
     if (listenHandlers.length === 0) return;
