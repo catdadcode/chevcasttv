@@ -29,7 +29,7 @@ export default class Chatbot {
     "alopex_art": "en-GB-Standard-A",
     "codemanis": "en-AU-Standard-B",
     "ember_stone": "en-US-Wavenet-H",
-    "harlequindollface": "en-US-Wavenet-F",
+    "dollzie": "en-US-Wavenet-F",
     "noobpieces": "en-IN-Wavenet-D"
   };
 
