@@ -24,6 +24,7 @@ type ListenHandler = (username: string, text: string) => void;
 
 let user: InstanceType<typeof User> | null = null;
 let connection: WebSocketConnection;
+let heartbeatTimerId: NodeJS.Timeout;
 const listenHandlers: ListenHandler[] = [];
 
 const validateToken = async () => {
@@ -68,52 +69,75 @@ const validateToken = async () => {
 };
 
 export const initialize = async () => {
-  await validateToken();
-  const wsClient = new WebSocketClient();
-  log("Connecting to restream chat websocket...");
-  wsClient.connect(`${RESTREAM_CHAT_WEBSOCKET}?accessToken=${user?.restream?.accessToken}`);
-  connection = await new Promise((resolve, reject) => {
-    wsClient.once("connect", connection => {
-      log("Websocket connected.");
-      resolve(connection);
+  const connect = async () => {
+    await validateToken();
+    const wsClient = new WebSocketClient();
+    log("Connecting to restream chat websocket...");
+    wsClient.connect(`${RESTREAM_CHAT_WEBSOCKET}?accessToken=${user?.restream?.accessToken}`);
+    connection = await new Promise((resolve, reject) => {
+      wsClient.once("connect", connection => {
+        log("Websocket connected.");
+        resolve(connection);
+      });
+      wsClient.once("connectFailed", err => {
+        log(`Websocket connection failed: ${err}.`);
+        reject(err);
+      });
     });
-    wsClient.once("connectFailed", err => {
-      log(`Websocket connection failed: ${err}.`);
-      reject(err);
-    });
+  };
+
+  await connect();
+
+  connection.on("error", async (err) => {
+    log(`Restream websocket connection error: ${err.message || err.toString()}`);
+    try {
+      await connect();
+    } catch(err: any) {
+      log(err.message || err.toString());
+    }
   });
 
-  connection.on("error", console.log);
-
   connection.on("close", async () => {
+    log(`Restream websocket connection closed.`);
     try {
-      await validateToken();
-      connection = await new Promise((resolve, reject) => {
-        wsClient.once("connect", connection => {
-          log("Websocket connected.");
-          resolve(connection);
-        });
-        wsClient.once("connectFailed", err => {
-          log(`Websocket connection failed: ${err}.`);
-          reject(err);
-        });
-      });
+      await connect();
     } catch (err: any) {
       console.log(err.message || err.toString());
     }
   })
 
-  connection.on("message", (message: WebSocketMessage) => {
-    if ("binaryData" in message) return;
-    if (listenHandlers.length === 0) return;
-    const { action, payload: { eventPayload } } = JSON.parse(message.utf8Data);
-    if (action === "event") {
-      const { author, text } = eventPayload;
-      const username = author.displayName ?? author.nickname ?? author.name;
-      log(`${author}: "${message}"`);
-      for (const handler of listenHandlers) {
-        handler(username, text);
+  connection.on("message", async (message: WebSocketMessage) => {
+    try {
+      if ("binaryData" in message) return;
+      if (listenHandlers.length === 0) return;
+      const { action, payload: { eventPayload } } = JSON.parse(message.utf8Data);
+      switch(action) {
+        case "event":
+          const { author, text } = eventPayload;
+          const username = author.displayName ?? author.nickname ?? author.name;
+          log(`${username}: "${text}"`);
+          for (const handler of listenHandlers) {
+            handler(username, text);
+          }
+          break;
+        case "heartbeat":
+          if (heartbeatTimerId) clearTimeout(heartbeatTimerId);
+          heartbeatTimerId = setTimeout(async () => {
+            try {
+              log(`Restream heartbeat not received for more than 60 seconds.`);
+              await connect();
+            } catch (err: any) {
+              console.log(err.message || err.toString());
+            }
+          }, 60000);
+          break;
+        case "connection_closed":
+          log(`Restream connection closed event received.`);
+          await connect();
+          break;
       }
+    } catch (err: any) {
+      console.log(err.message || err.toString());
     }
   });
 };
