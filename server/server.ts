@@ -75,9 +75,14 @@ const {
         twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
         discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
       }).initialize(),
+      // new Chatbot({
+      //   twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
+      //   discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+      // }).initialize(),
       new Chatbot({
-        twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
-        discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+        twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
+        discordChannelIds: ["915388624814612541"],
+        chevRestream: true
       }).initialize()
     ]);
   } else {
