@@ -19,7 +19,6 @@ const {
   APP_URL,
   NODE_ENV,
   DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID,
-  DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
   DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID,
   DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID,
   CHEV_TWITCH_CHANNELS,
@@ -66,7 +65,6 @@ const {
       new Chatbot({
         twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
         discordChannelIds: [
-          DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
           DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
         ],
         chevRestream: true
@@ -75,21 +73,15 @@ const {
         twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
         discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
       }).initialize(),
-      // new Chatbot({
-      //   twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
-      //   discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
-      // }).initialize(),
       new Chatbot({
-        twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
-        discordChannelIds: ["915388624814612541"],
-        chevRestream: true
-      }).initialize()
+        twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize(),
     ]);
   } else {
     await new Chatbot({
       twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
       discordChannelIds: [
-        DISCORD_WATERCOOLER_LIVESTREAM_VOICE_CHANNEL_ID,
         DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
       ],
       chevRestream: true
