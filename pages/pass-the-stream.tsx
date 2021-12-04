@@ -57,7 +57,7 @@ const PassTheStream: NextPage<Props> = (props) => {
   const { state, dispatch } = useAppState();
   const { user } = state;
 
-  const registrationMaxedOut = timeSlots.filter(timeSlot => timeSlot.RSVP?.id === user?.userId).length === 2;
+  const registrationMaxedOut = timeSlots.filter(timeSlot => timeSlot.RSVP?.id === user?.userId).length === 6;
 
   const register = async (timeSlot: TimeSlot) => {
     try {

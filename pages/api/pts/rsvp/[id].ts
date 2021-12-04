@@ -33,7 +33,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (timeSlot.RSVP) throw new Error(`User ${timeSlot.RSVP} has already registered for time slot ${timeSlot.id}`);
     if ((timeSlot.backupRSVPs?.map(b => b.toString()).includes(userId))) throw new Error(`User ${userId} has already registered as a backup for this time slot.`);
     const rsvps = await PTSTimeSlot.find({ RSVP: user._id });
-    if (rsvps.length === 2) throw new Error("You can only register for at most 2 time windows.");
+    if (rsvps.length === 6) throw new Error("You can only register for at most 2 time windows.");
 
     // Set RSVP to user.
     timeSlot.RSVP = user._id;
