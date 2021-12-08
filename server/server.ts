@@ -64,10 +64,7 @@ const {
     await Promise.all([
       new Chatbot({
         twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
-        discordChannelIds: [
-          DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-        ],
-        chevRestream: true
+        discordChannelIds: [ DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID ]
       }).initialize(),
       new Chatbot({
         twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
@@ -81,10 +78,7 @@ const {
   } else {
     await new Chatbot({
       twitchChannels: CHEV_TWITCH_CHANNELS.split(","),
-      discordChannelIds: [
-        DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID
-      ],
-      chevRestream: true
+      discordChannelIds: [ DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID ]
     }).initialize();
   }
   console.log("> Chatbots are now active.");
