@@ -10,7 +10,6 @@ import logger from "./logger";
 import { initialize as initDiscord } from "./api-clients/discordClient";
 import { initialize as initGoogleTTS } from "./api-clients/googleTTSClient";
 import { initialize as initTwitch } from "./api-clients/twitchClient";
-import { initialize as initRestream } from "./api-clients/restreamClient";
 import Chatbot from "./chatbot";
 
 const log = logger.extend("SERVER");
@@ -54,8 +53,7 @@ const {
   await Promise.all([
     initDiscord(),
     initGoogleTTS(),
-    initTwitch(),
-    initRestream()
+    initTwitch()
   ]);
   log("API clients ready.");
 
