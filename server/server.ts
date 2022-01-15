@@ -19,10 +19,11 @@ const log = logger.extend("SERVER");
 const {
   APP_URL,
   NODE_ENV,
+  DISCORD_ALOPEX_LIVESTREAM_VOICE_CHANNEL_ID,
   DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID,
   DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID,
   DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID,
-  CHEV_TWITCH_CHANNELS,
+  ALOPEX_TWITCH_CHANNELS,
   EMBER_TWITCH_CHANNELS,
   AZULA_TWITCH_CHANNELS
 } = config;
@@ -73,6 +74,10 @@ const {
       new Chatbot({
         twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
         discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize(),
+      new Chatbot({
+        twitchChannels: ALOPEX_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_ALOPEX_LIVESTREAM_VOICE_CHANNEL_ID ]
       }).initialize(),
     ]);
   } else {
