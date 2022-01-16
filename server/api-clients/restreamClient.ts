@@ -84,6 +84,23 @@ export const initialize = async () => {
         reject(err);
       });
     });
+    heartbeatMonitor();
+  };
+
+  const heartbeatMonitor = () => {
+    if (heartbeatTimerId) {
+      clearTimeout(heartbeatTimerId);
+    } else {
+      log(`Heartbeat monitor started.`);
+    }
+    heartbeatTimerId = setTimeout(async () => {
+      try {
+        log(`Restream heartbeat not received for more than 60 seconds.`);
+        await connect();
+      } catch (err: any) {
+        console.log(err.message || err.toString());
+      }
+    }, 60000);
   };
 
   await connect();
@@ -110,10 +127,10 @@ export const initialize = async () => {
     try {
       if ("binaryData" in message) return;
       if (listenHandlers.length === 0) return;
-      const { action, payload: { eventPayload } } = JSON.parse(message.utf8Data);
+      const { action, payload } = JSON.parse(message.utf8Data);
       switch(action) {
         case "event":
-          const { author, text } = eventPayload;
+          const { eventPayload: { author, text } } = payload;
           const username = author.displayName ?? author.nickname ?? author.name;
           log(`${username}: "${text}"`);
           for (const handler of listenHandlers) {
@@ -121,19 +138,15 @@ export const initialize = async () => {
           }
           break;
         case "heartbeat":
-          if (heartbeatTimerId) clearTimeout(heartbeatTimerId);
-          heartbeatTimerId = setTimeout(async () => {
-            try {
-              log(`Restream heartbeat not received for more than 60 seconds.`);
-              await connect();
-            } catch (err: any) {
-              console.log(err.message || err.toString());
-            }
-          }, 60000);
+          log(`Restream heartbeat received.`);
+          heartbeatMonitor();
           break;
         case "connection_closed":
           log(`Restream connection closed event received.`);
           await connect();
+          break;
+        default:
+          log(`Restream event: ${action} - ${JSON.stringify(payload, null, 2)}`);
           break;
       }
     } catch (err: any) {

@@ -46,6 +46,7 @@
     "react-dom": "17.0.2",
     "react-player": "^2.9.0",
     "styles": "file:styles",
+    "supports-color": "^9.2.1",
     "tmi.js": "^1.8.5",
     "types": "file:types",
     "websocket": "^1.0.34"
