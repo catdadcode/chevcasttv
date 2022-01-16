@@ -3,6 +3,7 @@ import {
   AudioPlayerStatus,
   createAudioPlayer,
   createAudioResource,
+  DiscordGatewayAdapterCreator,
   entersState,
   joinVoiceChannel,
   VoiceConnection,
@@ -36,7 +37,7 @@ const joinVoice = async (channelId: Snowflake) => {
   const connection = await joinVoiceChannel({
     channelId: channelId,
     guildId: channel.guild.id,
-    adapterCreator: channel.guild.voiceAdapterCreator
+    adapterCreator: channel.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator
   });
   await entersState(connection, VoiceConnectionStatus.Ready, 30e3);
   voiceConnections[channel.id] = connection;
