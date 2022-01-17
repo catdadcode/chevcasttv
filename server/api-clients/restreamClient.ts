@@ -70,6 +70,10 @@ const validateToken = async () => {
 
 export const initialize = async () => {
   const connect = async () => {
+    if (heartbeatTimerId) {
+      clearTimeout(heartbeatTimerId);
+      log(`Heartbeat monitor stopped.`);
+    }
     await validateToken();
     const wsClient = new WebSocketClient();
     log("Connecting to restream chat websocket...");
@@ -90,6 +94,7 @@ export const initialize = async () => {
   const heartbeatMonitor = () => {
     if (heartbeatTimerId) {
       clearTimeout(heartbeatTimerId);
+      log(`Heartbeat monitor restarted.`);
     } else {
       log(`Heartbeat monitor started.`);
     }
