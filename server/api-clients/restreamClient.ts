@@ -103,7 +103,7 @@ export const initialize = async () => {
         log(`Restream heartbeat not received for more than 60 seconds.`);
         await connect();
       } catch (err: any) {
-        console.log(err.message || err.toString());
+        log(err.message || err.toString());
       }
     }, 60000);
   };
