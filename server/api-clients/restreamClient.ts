@@ -145,7 +145,6 @@ export const initialize = async () => {
   const heartbeatMonitor = () => {
     if (heartbeatTimerId) {
       clearTimeout(heartbeatTimerId);
-      log(`Heartbeat monitor restarted.`);
     } else {
       log(`Heartbeat monitor started.`);
     }
