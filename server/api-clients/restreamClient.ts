@@ -27,6 +27,7 @@ let connection: WebSocketConnection;
 let heartbeatTimerId: NodeJS.Timeout;
 const listenHandlers: ListenHandler[] = [];
 
+// Check if restream access token is expired. If so then use the refresh token to renew it.
 const validateToken = async () => {
   log("Validating restream access token...");
   if (!user) {
@@ -88,6 +89,56 @@ export const initialize = async () => {
         reject(err);
       });
     });
+
+    connection.on("error", async (err) => {
+      log(`Restream websocket connection error: ${err.message || err.toString()}`);
+      try {
+        await connect();
+      } catch(err: any) {
+        log(err.message || err.toString());
+      }
+    });
+
+    connection.on("close", async () => {
+      log(`Restream websocket connection closed.`);
+      try {
+        await connect();
+      } catch (err: any) {
+        console.log(err.message || err.toString());
+      }
+    })
+
+    connection.on("message", async (message: WebSocketMessage) => {
+      try {
+        if ("binaryData" in message) return;
+        if (listenHandlers.length === 0) return;
+        const { action, payload } = JSON.parse(message.utf8Data);
+        switch(action) {
+          case "event":
+            const { eventPayload: { author, text } } = payload;
+            const username = author.displayName ?? author.nickname ?? author.name;
+            log(`${username}: "${text}"`);
+            for (const handler of listenHandlers) {
+              handler(username, text);
+            }
+            break;
+          case "heartbeat":
+            log(`Restream heartbeat received.`);
+            heartbeatMonitor();
+            break;
+          case "connection_closed":
+            log(`Restream connection closed event received.`);
+            await connect();
+            break;
+          default:
+            log(`Restream event: ${action} - ${JSON.stringify(payload, null, 2)}`);
+            break;
+        }
+      } catch (err: any) {
+        console.log(err.message || err.toString());
+      }
+    });
+
     heartbeatMonitor();
   };
 
@@ -110,54 +161,6 @@ export const initialize = async () => {
 
   await connect();
 
-  connection.on("error", async (err) => {
-    log(`Restream websocket connection error: ${err.message || err.toString()}`);
-    try {
-      await connect();
-    } catch(err: any) {
-      log(err.message || err.toString());
-    }
-  });
-
-  connection.on("close", async () => {
-    log(`Restream websocket connection closed.`);
-    try {
-      await connect();
-    } catch (err: any) {
-      console.log(err.message || err.toString());
-    }
-  })
-
-  connection.on("message", async (message: WebSocketMessage) => {
-    try {
-      if ("binaryData" in message) return;
-      if (listenHandlers.length === 0) return;
-      const { action, payload } = JSON.parse(message.utf8Data);
-      switch(action) {
-        case "event":
-          const { eventPayload: { author, text } } = payload;
-          const username = author.displayName ?? author.nickname ?? author.name;
-          log(`${username}: "${text}"`);
-          for (const handler of listenHandlers) {
-            handler(username, text);
-          }
-          break;
-        case "heartbeat":
-          log(`Restream heartbeat received.`);
-          heartbeatMonitor();
-          break;
-        case "connection_closed":
-          log(`Restream connection closed event received.`);
-          await connect();
-          break;
-        default:
-          log(`Restream event: ${action} - ${JSON.stringify(payload, null, 2)}`);
-          break;
-      }
-    } catch (err: any) {
-      console.log(err.message || err.toString());
-    }
-  });
 };
 
 export const listen = async (handler: ListenHandler) => {
