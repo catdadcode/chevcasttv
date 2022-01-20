@@ -9,6 +9,7 @@ import {
   connection as WebSocketConnection,
   Message as WebSocketMessage
 } from "websocket";
+import { connection } from "mongoose";
 
 const log = logger.extend("RESTREAM_CLIENT");
 
@@ -23,7 +24,6 @@ const {
 type ListenHandler = (username: string, text: string) => void;
 
 let user: InstanceType<typeof User> | null = null;
-let connection: WebSocketConnection;
 let heartbeatTimerId: NodeJS.Timeout;
 const listenHandlers: ListenHandler[] = [];
 
@@ -79,7 +79,7 @@ export const initialize = async () => {
     const wsClient = new WebSocketClient();
     log("Connecting to restream chat websocket...");
     wsClient.connect(`${RESTREAM_CHAT_WEBSOCKET}?accessToken=${user?.restream?.accessToken}`);
-    connection = await new Promise((resolve, reject) => {
+    const connection: WebSocketConnection = await new Promise((resolve, reject) => {
       wsClient.once("connect", connection => {
         log("Websocket connected.");
         resolve(connection);
@@ -93,6 +93,7 @@ export const initialize = async () => {
     connection.on("error", async (err) => {
       log(`Restream websocket connection error: ${err.message || err.toString()}`);
       try {
+        connection.removeAllListeners();
         await connect();
       } catch(err: any) {
         log(err.message || err.toString());
@@ -102,6 +103,7 @@ export const initialize = async () => {
     connection.on("close", async () => {
       log(`Restream websocket connection closed.`);
       try {
+        connection.removeAllListeners();
         await connect();
       } catch (err: any) {
         console.log(err.message || err.toString());
@@ -128,6 +130,7 @@ export const initialize = async () => {
             break;
           case "connection_closed":
             log(`Restream connection closed event received.`);
+            connection.removeAllListeners();
             await connect();
             break;
           default:
@@ -151,6 +154,7 @@ export const initialize = async () => {
     heartbeatTimerId = setTimeout(async () => {
       try {
         log(`Restream heartbeat not received for more than 60 seconds.`);
+        connection.removeAllListeners();
         await connect();
       } catch (err: any) {
         log(err.message || err.toString());
