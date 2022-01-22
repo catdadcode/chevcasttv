@@ -49,6 +49,7 @@ export default class Chatbot {
     const listeners: Promise<() => void>[] = [];
     await listen((username, message) => {
       if (message.match(/^\s*$/)) return;
+      if (message.match(/^[a-zA-Z][a-zA-Z][a-zA-Z]?[a-zA-Z]?[ \.][ \.]?[a-zA-Z][a-zA-Z][a-zA-Z]?[a-zA-Z]?$/g)) return;
       this.queueMessage(username, message);
     });
     await Promise.all(listeners);
