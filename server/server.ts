@@ -65,7 +65,7 @@ const {
   if (NODE_ENV === "production") {
     await Promise.all([
       new RestreamChatbot({
-        discordChannelIds: [ DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID ]
+        discordChannelIds: [ /*DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID*/"850127846215122954" ]
       }).initialize(),
       new Chatbot({
         twitchChannels: ["jaded_ember","ember_stone"],
