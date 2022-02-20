@@ -2,7 +2,6 @@ import emojiRegex from "emoji-regex";
 import { playAudio } from "./api-clients/discordClient";
 import { createAudio, englishVoices } from "./api-clients/googleTTSClient";
 import { listenToChannels as twitchListen } from "./api-clients/twitchClient";
-import { listen as restreamListen } from "./api-clients/restreamClient";
 import logger from "./logger";
 import config from "config";
 import fs from "fs";

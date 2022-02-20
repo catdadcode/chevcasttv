@@ -65,24 +65,24 @@ const {
   if (NODE_ENV === "production") {
     await Promise.all([
       new RestreamChatbot({
-        discordChannelIds: [ /*DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID*/"850127846215122954" ]
+        discordChannelIds: [ DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID ]
       }).initialize(),
       new Chatbot({
-        twitchChannels: ["jaded_ember","ember_stone"],
+        twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize(),
+      new Chatbot({
+        twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize(),
+      new Chatbot({
+        twitchChannels: ALOPEX_TWITCH_CHANNELS.split(","),
+        discordChannelIds: [ DISCORD_ALOPEX_LIVESTREAM_VOICE_CHANNEL_ID ]
+      }).initialize(),
+      await new Chatbot({
+        twitchChannels: ["jaded_ember"],
         discordChannelIds: ["850127846215122954"]
-      }),
-      // new Chatbot({
-      //   twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
-      //   discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
-      // }).initialize(),
-      // new Chatbot({
-      //   twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
-      //   discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
-      // }).initialize(),
-      // new Chatbot({
-      //   twitchChannels: ALOPEX_TWITCH_CHANNELS.split(","),
-      //   discordChannelIds: [ DISCORD_ALOPEX_LIVESTREAM_VOICE_CHANNEL_ID ]
-      // }).initialize(),
+      }).initialize()
     ]);
   } else {
     await new RestreamChatbot({
