@@ -65,28 +65,28 @@ const {
   if (NODE_ENV === "production") {
     await Promise.all([
       new RestreamChatbot({
-        discordChannelIds: [ DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID ]
+        discordChannelIds: ["752398756229677171"]
       }).initialize(),
       new Chatbot({
-        twitchChannels: AZULA_TWITCH_CHANNELS.split(","),
-        discordChannelIds: [ DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID ]
+        twitchChannels: ["dollzie"],
+        discordChannelIds: ["709836347548106785"]
       }).initialize(),
       new Chatbot({
-        twitchChannels: EMBER_TWITCH_CHANNELS.split(","),
-        discordChannelIds: [ DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID ]
+        twitchChannels: ["ember_stone"],
+        discordChannelIds: ["892242868406714373"]
       }).initialize(),
       new Chatbot({
-        twitchChannels: ALOPEX_TWITCH_CHANNELS.split(","),
-        discordChannelIds: [ DISCORD_ALOPEX_LIVESTREAM_VOICE_CHANNEL_ID ]
+        twitchChannels: ["alopex_art"],
+        discordChannelIds: ["816050882818474088"]
       }).initialize(),
-      await new Chatbot({
+      new Chatbot({
         twitchChannels: ["jaded_ember"],
         discordChannelIds: ["850127846215122954"]
       }).initialize()
     ]);
   } else {
     await new RestreamChatbot({
-      discordChannelIds: [ DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID ]
+      discordChannelIds: ["752398756229677171"]
     }).initialize();
   }
   console.log("> Chatbots are now active.");
