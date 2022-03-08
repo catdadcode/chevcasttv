@@ -10,22 +10,15 @@ import logger from "./logger";
 import { initialize as initDiscord } from "./api-clients/discordClient";
 import { initialize as initGoogleTTS } from "./api-clients/googleTTSClient";
 import { initialize as initTwitch } from "./api-clients/twitchClient";
-import { initialize as initRestream } from "./api-clients/restreamClient";
+// import { initialize as initRestream } from "./api-clients/restreamClient";
 import Chatbot from "./chatbot";
-import RestreamChatbot from "./restream-chatbot";
+// import RestreamChatbot from "./restream-chatbot";
 
 const log = logger.extend("SERVER");
 
 const {
   APP_URL,
-  NODE_ENV,
-  DISCORD_ALOPEX_LIVESTREAM_VOICE_CHANNEL_ID,
-  DISCORD_CHEVCAST_LIVESTREAM_VOICE_CHANNEL_ID,
-  DISCORD_EMBERSCABIN_LIVESTREAM_VOICE_CHANNEL_ID,
-  DISCORD_DOLLZULASDOLLHOUSE_LIVESTREAM_VOICE_CHANNEL_ID,
-  ALOPEX_TWITCH_CHANNELS,
-  EMBER_TWITCH_CHANNELS,
-  AZULA_TWITCH_CHANNELS
+  NODE_ENV
 } = config;
 
 (async () => {
@@ -57,7 +50,7 @@ const {
     initDiscord(),
     initGoogleTTS(),
     initTwitch(),
-    initRestream()
+    // initRestream()
   ]);
   log("API clients ready.");
 
@@ -68,7 +61,7 @@ const {
       //   discordChannelIds: ["752398756229677171"]
       // }).initialize(),
       new Chatbot({
-        twitchChannels: ["ChevCast"],
+        twitchChannels: ["chevcast"],
         discordChannelIds: ["752398756229677171"]
       }).initialize(),
       new Chatbot({
@@ -90,7 +83,7 @@ const {
     ]);
   } else {
     await new Chatbot({
-      twitchChannels: ["ChevCast"],
+      twitchChannels: ["chevcast"],
       discordChannelIds: ["752398756229677171"]
     }).initialize();
     // await new RestreamChatbot({

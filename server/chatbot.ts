@@ -52,6 +52,7 @@ export default class Chatbot {
     this.log("Subscribing to Twitch channels...");
     const listeners: Promise<() => void>[] = [];
     await twitchListen(this.twitchChannels, (username, message, channel, emotes) => {
+      console.log("HERE WE ARE!");
       if (emotes) {
         const emoteStrings = Object.keys(emotes).map(emoteId => {
           const [emoteRange] = emotes[emoteId];
@@ -126,6 +127,7 @@ export default class Chatbot {
       const ttsMessage = username === this.currentUser || message.startsWith("ALEXA")
         ? message : `${this.enunciateUsername(username)} says ${message}`;
       const audioContent = await createAudio(ttsMessage, voice);
+      this.log("MADE IT HERE");
       await this.sendTTS(audioContent);
       this.currentUser = username;
       if (this.voiceContextTimeout) clearTimeout(this.voiceContextTimeout);
