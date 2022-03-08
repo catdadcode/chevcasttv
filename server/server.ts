@@ -64,7 +64,11 @@ const {
   log("Starting chatbot...");
   if (NODE_ENV === "production") {
     await Promise.all([
-      new RestreamChatbot({
+      // new RestreamChatbot({
+      //   discordChannelIds: ["752398756229677171"]
+      // }).initialize(),
+      new Chatbot({
+        twitchChannels: ["ChevCast"],
         discordChannelIds: ["752398756229677171"]
       }).initialize(),
       new Chatbot({
@@ -85,9 +89,13 @@ const {
       }).initialize()
     ]);
   } else {
-    await new RestreamChatbot({
+    await new Chatbot({
+      twitchChannels: ["ChevCast"],
       discordChannelIds: ["752398756229677171"]
     }).initialize();
+    // await new RestreamChatbot({
+    //   discordChannelIds: ["752398756229677171"]
+    // }).initialize();
   }
   console.log("> Chatbots are now active.");
 
