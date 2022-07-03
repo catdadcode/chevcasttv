@@ -5,7 +5,7 @@ import {
   Typography
 } from "components";
 
-const Home: NextPage = () => {
+const Logo: NextPage = () => {
   return (
     <>
       <Box sx={{
@@ -43,4 +43,4 @@ const Home: NextPage = () => {
   );
 }
 
-export default Home
+export default Logo

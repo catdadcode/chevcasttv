@@ -52,7 +52,6 @@ export default class Chatbot {
     this.log("Subscribing to Twitch channels...");
     const listeners: Promise<() => void>[] = [];
     await twitchListen(this.twitchChannels, (username, message, channel, emotes) => {
-      console.log("HERE WE ARE!");
       if (emotes) {
         const emoteStrings = Object.keys(emotes).map(emoteId => {
           const [emoteRange] = emotes[emoteId];

@@ -14,6 +14,7 @@
       "args": ["-w", "${workspaceFolder}/server"],
       "outputCapture": "std",
       "env": {
+        "NODE_ENV": "development",
         "TS_NODE_PROJECT": "tsconfig.server.json",
         "DEBUG": "CHEVCASTTV:*"
       },
