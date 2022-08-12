@@ -57,13 +57,13 @@ const {
   log("Starting chatbot...");
   if (NODE_ENV === "production") {
     await Promise.all([
-      new RestreamChatbot({
-        discordChannelIds: ["752398756229677171"]
-      }).initialize(),
-      // new Chatbot({
-      //   twitchChannels: ["chevcast"],
+      // new RestreamChatbot({
       //   discordChannelIds: ["752398756229677171"]
       // }).initialize(),
+      new Chatbot({
+        twitchChannels: ["chevcast"],
+        discordChannelIds: ["752398756229677171"]
+      }).initialize(),
       new Chatbot({
         twitchChannels: ["dollzie"],
         discordChannelIds: ["709836347548106785"]
