@@ -82,7 +82,7 @@ const {
       }).initialize(),
       new Chatbot({
         twitchChannels: ["kab00sh_inc"],
-        discordChannelIds: ["1002324779434528911"]
+        discordChannelIds: ["1008113082456879204"]
       }).initialize()
     ]);
   } else {
