@@ -82,7 +82,7 @@ const {
         discordChannelIds: ["1008113082456879204"]
       }).initialize(),
       new Chatbot({
-        twitchChannels: ["oOElfeyOo"],
+        twitchChannels: ["ooelfeyoo"],
         discordChannelIds: ["956408126192623676"]
       }).initialize()
     ]);
