@@ -55,11 +55,11 @@ const {
   if (NODE_ENV === "production") {
     await Promise.all([
       // new RestreamChatbot({
-      //   discordChannelIds: ["752398756229677171"]
+      //   discordChannelIds: ["1025119293211422771"]
       // }).initialize(),
       new Chatbot({
         twitchChannels: ["chevcast"],
-        discordChannelIds: ["752398756229677171"]
+        discordChannelIds: ["1025119293211422771"]
       }).initialize(),
       new Chatbot({
         twitchChannels: ["dollzie"],
