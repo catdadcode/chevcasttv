@@ -87,7 +87,7 @@ const {
       new Chatbot({
         twitchChannels: ["oOElfeyOo"],
         discordChannelIds: ["956408126192623676"]
-      })
+      }).initialize()
     ]);
   } else {
     await new Chatbot({
