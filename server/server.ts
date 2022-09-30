@@ -63,7 +63,7 @@ const {
       }).initialize(),
       new Chatbot({
         twitchChannels: ["dollzie"],
-        discordChannelIds: ["709836347548106785"]
+        discordChannelIds: ["709836347548106785", "816050882818474088"]
       }).initialize(),
       new Chatbot({
         twitchChannels: ["ember_stone"],
