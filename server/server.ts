@@ -63,7 +63,7 @@ const {
       }).initialize(),
       new Chatbot({
         twitchChannels: ["dollzie"],
-        discordChannelIds: ["709836347548106785", "816050882818474088"]
+        discordChannelIds: ["709836347548106785"]
       }).initialize(),
       new Chatbot({
         twitchChannels: ["ember_stone"],
@@ -89,7 +89,7 @@ const {
   } else {
     await new Chatbot({
       twitchChannels: ["chevcast"],
-      discordChannelIds: ["752398756229677171"]
+      discordChannelIds: ["1025119293211422771"]
     }).initialize();
     // await new RestreamChatbot({
     //   discordChannelIds: ["752398756229677171"]

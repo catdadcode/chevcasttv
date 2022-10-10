@@ -17,7 +17,7 @@ const log = logger.extend("DISCORD_CLIENT");
 
 const { DISCORD_BOT_TOKEN } = config;
 
-const discordClient = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] }); 
+const discordClient = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES, Intents.FLAGS.GUILD_PRESENCES] }); 
 
 export const initialize = async () => {
   log("Initializing Discord client...");
