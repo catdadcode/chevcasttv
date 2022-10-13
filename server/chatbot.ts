@@ -102,7 +102,7 @@ export default class Chatbot {
   }
 
   queueMessage(username: string, message: string) {
-    const blackList = ["streamelements", "soundalerts", "pretzelrocks", "elbierro", "ooelfeyoo", "dixperbro", "streamcaptainbot", "pokemoncommunitygame"];
+    const blackList = ["streamelements", "soundalerts", "pretzelrocks", "elbierro", "ooelfeyoo", "dixperbro", "streamcaptainbot"];
     if (blackList.includes(username.toLowerCase())) return;
     if (message.startsWith("!")) return;
     const urlRegex = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
@@ -126,7 +126,6 @@ export default class Chatbot {
       const silentUsernames = ["pokemoncommunitygame"];
       const ttsMessage = silentUsernames.includes(username) ? message : `${this.enunciateUsername(username)} says ${message}`;
       const audioContent = await createAudio(ttsMessage, voice);
-      this.log("MADE IT HERE");
       await this.sendTTS(audioContent);
       this.currentUser = username;
       if (this.voiceContextTimeout) clearTimeout(this.voiceContextTimeout);
