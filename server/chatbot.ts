@@ -124,7 +124,10 @@ export default class Chatbot {
         }
       }
       const silentUsernames = ["pokemoncommunitygame"];
-      const ttsMessage = silentUsernames.includes(username.toLowerCase()) ? message : `${this.enunciateUsername(username)} says ${message}`;
+      let ttsMessage = message;
+      if (!silentUsernames.includes(username.toLowerCase()) && this.currentUser !== username){
+        ttsMessage = `${this.enunciateUsername(username)} says ${message}`;
+      }
       const audioContent = await createAudio(ttsMessage, voice);
       await this.sendTTS(audioContent);
       this.currentUser = username;
