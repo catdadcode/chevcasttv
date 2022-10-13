@@ -123,8 +123,8 @@ export default class Chatbot {
           this.fillAvailableVoices();
         }
       }
-      const ttsMessage = username === this.currentUser || message.startsWith("ALEXA")
-        ? message : `${this.enunciateUsername(username)} says ${message}`;
+      const silentUsernames = ["pokemoncommunitygame"];
+      const ttsMessage = silentUsernames.includes(username) ? message : `${this.enunciateUsername(username)} says ${message}`;
       const audioContent = await createAudio(ttsMessage, voice);
       this.log("MADE IT HERE");
       await this.sendTTS(audioContent);
